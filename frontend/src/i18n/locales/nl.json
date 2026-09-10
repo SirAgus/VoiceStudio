@@ -14,6 +14,7 @@
     "desktop": "Kan de lokale VoiceStudio-backend niet bereiken. {{contact}} Open de crashmelding als die verscheen, of Instellingen → Logs → Backend voor het laatste dat hij logde — \"{{retry}}\" start hem opnieuw en \"{{cleanRetry}}\" bouwt zijn omgeving opnieuw op als hij niet terugkomt."
   },
   "nav": {
+    "talk": "Praten",
     "clone": "Klonen",
     "design": "Ontwerpen",
     "dub": "Dubben",
@@ -2725,6 +2726,13 @@
     "cta_design": "Beschrijf een stem in Stem ← om die te ontwerpen",
     "new": "Nieuwe stem",
     "none_selected": "Geen stem geselecteerd — beschrijf er een, zet audio neer of kies hieronder."
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4-spraakassistent", "subtitle": "Gemma luistert en denkt lokaal; VoiceStudio spreekt het antwoord uit.",
+    "voice": "Spreekstem", "default_voice": "Standaard TTS-stem", "persona": "Assistentpersona", "default_persona": "Je bent een beknopte, behulpzame spraakassistent. Antwoord in de taal van de gebruiker.",
+    "spoken_reply": "Antwoord van Gemma 4", "failed": "De spraakbeurt is mislukt.", "listening": "Luisteren…",
+    "thinking": "Nadenken…", "speaking": "Spreken…", "ready": "Gereed", "empty": "Druk op Praten, spreek en druk daarna op Stoppen.",
+    "clear": "Wissen", "stop": "Stoppen", "talk": "Praten"
   },
   "convert": {
     "source_kicker": "Bronclip",

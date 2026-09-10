@@ -14,6 +14,7 @@
     "desktop": "Yerel VoiceStudio arka ucuna ulaşılamıyor. {{contact}} Bir çökme bildirimi çıktıysa açın veya Ayarlar → Günlükler → Arka uç bölümünden en son kaydedileni görün — \"{{retry}}\" yeniden başlatır, geri gelmezse \"{{cleanRetry}}\" ortamını yeniden kurar."
   },
   "nav": {
+    "talk": "Konuş",
     "clone": "Klonla",
     "design": "Tasarla",
     "dub": "Dublaj",
@@ -2725,6 +2726,13 @@
     "cta_design": "Tasarlamak için Ses ← panelinde tarif edin",
     "new": "Yeni ses",
     "none_selected": "Ses seçilmedi — birini tarif edin, ses dosyası bırakın veya aşağıdan seçin."
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4 sesli asistan", "subtitle": "Gemma yerel olarak dinler ve düşünür; VoiceStudio yanıtı seslendirir.",
+    "voice": "Konuşma sesi", "default_voice": "Varsayılan TTS sesi", "persona": "Asistan kişiliği", "default_persona": "Kısa ve yararlı bir sesli asistansın. Kullanıcının dilinde yanıt ver.",
+    "spoken_reply": "Gemma 4 yanıtı", "failed": "Sesli konuşma başarısız oldu.", "listening": "Dinliyor…",
+    "thinking": "Düşünüyor…", "speaking": "Konuşuyor…", "ready": "Hazır", "empty": "Konuş'a basın, konuşun ve ardından Durdur'a basın.",
+    "clear": "Temizle", "stop": "Durdur", "talk": "Konuş"
   },
   "convert": {
     "source_kicker": "Kaynak klip",

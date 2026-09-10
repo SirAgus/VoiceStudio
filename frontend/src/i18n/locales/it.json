@@ -14,6 +14,7 @@
     "desktop": "Impossibile raggiungere il backend VoiceStudio locale. {{contact}} Apri l'avviso di crash se ne è comparso uno, oppure Impostazioni → Log → Backend per l'ultima cosa registrata: «{{retry}}» lo riavvia e «{{cleanRetry}}» ricostruisce il suo ambiente se non torna."
   },
   "nav": {
+    "talk": "Parla",
     "clone": "Clona",
     "design": "Progetta",
     "dub": "Doppia",
@@ -2725,6 +2726,13 @@
     "cta_design": "Descrivine una in Voce ← per progettarla",
     "new": "Nuova voce",
     "none_selected": "Nessuna voce selezionata — descrivine una, trascina un audio o scegli qui sotto."
+  },
+  "gemma4_assistant": {
+    "title": "Assistente vocale Gemma 4", "subtitle": "Gemma ascolta e pensa in locale; VoiceStudio pronuncia la risposta.",
+    "voice": "Voce parlante", "default_voice": "Voce TTS predefinita", "persona": "Personalità dell’assistente", "default_persona": "Sei un assistente vocale conciso e disponibile. Rispondi nella lingua dell’utente.",
+    "spoken_reply": "Risposta di Gemma 4", "failed": "Il turno vocale non è riuscito.", "listening": "In ascolto…",
+    "thinking": "Sto pensando…", "speaking": "Sto parlando…", "ready": "Pronto", "empty": "Premi Parla, parla e poi premi Stop.",
+    "clear": "Cancella", "stop": "Stop", "talk": "Parla"
   },
   "convert": {
     "source_kicker": "Clip sorgente",

@@ -132,6 +132,7 @@ The desktop launcher configures Python dependencies on first run via `uv` automa
 | **Video Dubbing** | Transcribe, translate, preserve speakers, synthesize, and export video ([export guide](docs/dubbing/export.md)) |
 | **Stories and audiobooks** | Multi-voice scripts · EPUB/PDF import · chapter rendering · `.m4b` export |
 | **[Dictation Widget](docs/features/dictation.md)** | System-wide shortcut, live transcription, optional local-LLM cleanup |
+| **[Gemma 4 voice assistant](docs/features/gemma4-voice-assistant.md)** | Push-to-talk conversation: Gemma 4 E4B listens and reasons locally, then a VoiceStudio TTS voice answers |
 | **Vocal Isolation** | Demucs speech/background separation |
 | **Speaker Diarization** | Pyannote and WhisperX speaker assignment ([guide](docs/features/diarization.md)) |
 | **Batch Queue** | Queue large sets of audio and video jobs with per-job progress, or watch a local folder for new videos |

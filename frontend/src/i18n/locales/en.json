@@ -150,6 +150,7 @@
     "deleteProjectConfirm": "Delete this project permanently?"
   },
   "nav": {
+    "talk": "Talk",
     "launchpad": "Launchpad",
     "voice": "Voice",
     "clone": "Clone",
@@ -3226,6 +3227,13 @@
     "cta_design": "Describe one in Voice ← to design it",
     "new": "New voice",
     "none_selected": "No voice selected — describe one, drop audio, or pick below."
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4 voice assistant", "subtitle": "Gemma listens and thinks locally; VoiceStudio speaks the answer.",
+    "voice": "Speaking voice", "default_voice": "Default TTS voice", "persona": "Assistant persona", "default_persona": "You are a concise, helpful voice assistant. Reply in the language used by the user.",
+    "spoken_reply": "Gemma 4 reply", "failed": "The voice turn failed.", "listening": "Listening…",
+    "thinking": "Thinking…", "speaking": "Speaking…", "ready": "Ready", "empty": "Press Talk, speak, then press Stop.",
+    "clear": "Clear", "stop": "Stop", "talk": "Talk"
   },
   "convert": {
     "source_kicker": "Source clip",

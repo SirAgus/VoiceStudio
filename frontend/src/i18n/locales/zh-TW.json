@@ -14,6 +14,7 @@
     "desktop": "無法連線到本機 VoiceStudio 後端。{{contact}} 若出現當機通知請開啟它，或在 設定 → 記錄 → 後端 中查看它最後記錄的內容——「{{retry}}」會重新啟動它，若仍無法恢復，「{{cleanRetry}}」會重建它的執行環境。"
   },
   "nav": {
+    "talk": "對話",
     "clone": "複製聲音",
     "design": "設計聲音",
     "dub": "影片配音",
@@ -2725,6 +2726,13 @@
     "cta_design": "在 語音 ← 中描述即可設計",
     "new": "新增聲音",
     "none_selected": "尚未選擇聲音——描述一個、放入音訊，或從下方挑選。"
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4 語音助理", "subtitle": "Gemma 在本機聆聽與思考，VoiceStudio 朗讀回答。",
+    "voice": "朗讀聲音", "default_voice": "預設 TTS 聲音", "persona": "助理角色", "default_persona": "你是一名簡潔、樂於助人的語音助理。請使用使用者所用的語言回答。",
+    "spoken_reply": "Gemma 4 回答", "failed": "語音對話失敗。", "listening": "正在聆聽…",
+    "thinking": "正在思考…", "speaking": "正在說話…", "ready": "準備就緒", "empty": "按「對話」開始說話，說完後按「停止」。",
+    "clear": "清除", "stop": "停止", "talk": "對話"
   },
   "convert": {
     "source_kicker": "來源音訊",

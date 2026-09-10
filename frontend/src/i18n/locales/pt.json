@@ -14,6 +14,7 @@
     "desktop": "Não foi possível conectar ao backend local do VoiceStudio. {{contact}} Abra o aviso de falha, se apareceu, ou Configurações → Logs → Backend para a última coisa registrada — \"{{retry}}\" o reinicia e \"{{cleanRetry}}\" reconstrói o ambiente dele se não voltar."
   },
   "nav": {
+    "talk": "Falar",
     "clone": "Clonar",
     "design": "Desenhar",
     "dub": "Dublar",
@@ -2725,6 +2726,13 @@
     "cta_design": "Descreva uma em Voz ← para desenhá-la",
     "new": "Nova voz",
     "none_selected": "Nenhuma voz selecionada — descreva uma, solte um áudio ou escolha abaixo."
+  },
+  "gemma4_assistant": {
+    "title": "Assistente de voz Gemma 4", "subtitle": "Gemma ouve e pensa localmente; o VoiceStudio fala a resposta.",
+    "voice": "Voz de fala", "default_voice": "Voz TTS padrão", "persona": "Personalidade do assistente", "default_persona": "Você é um assistente de voz conciso e útil. Responda no idioma do usuário.",
+    "spoken_reply": "Resposta do Gemma 4", "failed": "O turno de voz falhou.", "listening": "Ouvindo…",
+    "thinking": "Pensando…", "speaking": "Falando…", "ready": "Pronto", "empty": "Pressione Falar, fale e depois pressione Parar.",
+    "clear": "Limpar", "stop": "Parar", "talk": "Falar"
   },
   "convert": {
     "source_kicker": "Clipe de origem",

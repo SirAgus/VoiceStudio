@@ -98,6 +98,7 @@ GET /gallery/categories
 GET /gallery/voices
 GET /gallery/voices/{voice_id}
 GET /gallery/voices/{voice_id}/preview
+GET /gemma4-assistant/status
 GET /glossary/{project_id}
 GET /health
 GET /history
@@ -209,6 +210,7 @@ POST /gallery/voices/batch-delete
 POST /gallery/voices/{voice_id}/save-as-profile
 POST /gallery/voices/{voice_id}/to-profile
 POST /generate
+POST /gemma4-assistant/turn
 POST /glossary/{project_id}
 POST /glossary/{project_id}/auto-extract
 POST /longform/render

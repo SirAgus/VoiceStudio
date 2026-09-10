@@ -42,7 +42,7 @@ def test_registry_has_all_providers(lp):
     # 13 cloud + 2 local + custom + openai
     for expected in ("openai", "openrouter", "orcarouter", "groq", "cerebras", "google-ai",
                      "mistral", "cohere", "nvidia", "github-models", "cloudflare",
-                     "huggingface", "sambanova", "siliconflow", "ollama",
+                     "huggingface", "sambanova", "siliconflow", "ollama", "gemma4-local",
                      "lmstudio", "custom"):
         assert expected in ids, expected
 
@@ -107,6 +107,13 @@ def test_local_provider_needs_no_key(lp):
     assert lp.has_key(p) is True
     assert lp.resolve_api_key(p) == "local"
     assert lp.is_configured(p) is True  # has default base_url + local
+
+
+def test_gemma4_provider_contract(lp):
+    p = lp.get_provider("gemma4-local")
+    assert p.local is True
+    assert p.default_model == "google/gemma-4-E4B-it"
+    assert p.default_base_url == "http://localhost:8000/v1"
 
 
 def test_cloudflare_account_interpolation(lp):

@@ -14,6 +14,7 @@
     "desktop": "Nie można połączyć się z lokalnym backendem VoiceStudio. {{contact}} Otwórz powiadomienie o awarii, jeśli się pojawiło, albo Ustawienia → Logi → Backend, by zobaczyć ostatni wpis — „{{retry}}” uruchamia go ponownie, a „{{cleanRetry}}” odbudowuje jego środowisko, jeśli nie wraca."
   },
   "nav": {
+    "talk": "Rozmawiaj",
     "clone": "Klonuj",
     "design": "Projektuj",
     "dub": "Dubbing",
@@ -2725,6 +2726,13 @@
     "cta_design": "Opisz głos w „Głos” ←, aby go zaprojektować",
     "new": "Nowy głos",
     "none_selected": "Nie wybrano głosu — opisz go, upuść audio albo wybierz poniżej."
+  },
+  "gemma4_assistant": {
+    "title": "Asystent głosowy Gemma 4", "subtitle": "Gemma słucha i myśli lokalnie; VoiceStudio wypowiada odpowiedź.",
+    "voice": "Głos odpowiedzi", "default_voice": "Domyślny głos TTS", "persona": "Osobowość asystenta", "default_persona": "Jesteś zwięzłym i pomocnym asystentem głosowym. Odpowiadaj w języku użytkownika.",
+    "spoken_reply": "Odpowiedź Gemma 4", "failed": "Tura głosowa nie powiodła się.", "listening": "Słuchanie…",
+    "thinking": "Myślenie…", "speaking": "Mówienie…", "ready": "Gotowe", "empty": "Naciśnij Rozmawiaj, powiedz coś, a następnie naciśnij Stop.",
+    "clear": "Wyczyść", "stop": "Stop", "talk": "Rozmawiaj"
   },
   "convert": {
     "source_kicker": "Klip źródłowy",

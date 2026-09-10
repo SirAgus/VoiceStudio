@@ -124,6 +124,7 @@
     "not_set": "未设置"
   },
   "nav": {
+    "talk": "对话",
     "launchpad": "工作台",
     "clone": "克隆",
     "design": "设计",
@@ -2732,6 +2733,13 @@
     "cta_design": "在 语音 ← 中描述即可设计",
     "new": "新建声音",
     "none_selected": "未选择声音——描述一个、拖入音频，或从下方选择。"
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4 语音助手", "subtitle": "Gemma 在本地聆听和思考，VoiceStudio 朗读回答。",
+    "voice": "朗读声音", "default_voice": "默认 TTS 声音", "persona": "助手角色", "default_persona": "你是一名简洁、乐于助人的语音助手。请使用用户所用的语言回答。",
+    "spoken_reply": "Gemma 4 回答", "failed": "语音对话失败。", "listening": "正在聆听…",
+    "thinking": "正在思考…", "speaking": "正在说话…", "ready": "准备就绪", "empty": "按“对话”开始说话，说完后按“停止”。",
+    "clear": "清空", "stop": "停止", "talk": "对话"
   },
   "convert": {
     "source_kicker": "源音频",

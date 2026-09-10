@@ -14,6 +14,7 @@
     "desktop": "Der lokale VoiceStudio-Dienst ist nicht erreichbar. {{contact}} Öffne die Absturzmeldung, falls eine erschienen ist, oder Einstellungen → Logs → Backend für das Letzte, was er protokolliert hat — „{{retry}}“ startet ihn neu, „{{cleanRetry}}“ baut seine Umgebung neu auf, falls er nicht zurückkommt."
   },
   "nav": {
+    "talk": "Sprechen",
     "clone": "Klonen",
     "design": "Designen",
     "dub": "Dubben",
@@ -2725,6 +2726,13 @@
     "cta_design": "Beschreiben Sie eine in Stimme ←, um sie zu designen",
     "new": "Neue Stimme",
     "none_selected": "Keine Stimme ausgewählt — beschreiben Sie eine, legen Sie Audio ab oder wählen Sie unten eine aus."
+  },
+  "gemma4_assistant": {
+    "title": "Gemma-4-Sprachassistent", "subtitle": "Gemma hört und denkt lokal; VoiceStudio spricht die Antwort.",
+    "voice": "Sprechstimme", "default_voice": "Standard-TTS-Stimme", "persona": "Assistentenrolle", "default_persona": "Du bist ein knapper, hilfreicher Sprachassistent. Antworte in der Sprache des Benutzers.",
+    "spoken_reply": "Gemma-4-Antwort", "failed": "Der Sprachdialog ist fehlgeschlagen.", "listening": "Hört zu…",
+    "thinking": "Denkt nach…", "speaking": "Spricht…", "ready": "Bereit", "empty": "Sprechen drücken, sprechen und dann Stopp drücken.",
+    "clear": "Leeren", "stop": "Stopp", "talk": "Sprechen"
   },
   "convert": {
     "source_kicker": "Quellclip",

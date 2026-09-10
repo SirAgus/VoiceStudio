@@ -14,6 +14,7 @@
     "desktop": "Không thể kết nối tới backend VoiceStudio cục bộ. {{contact}} Hãy mở thông báo sự cố nếu có, hoặc vào Cài đặt → Nhật ký → Backend để xem điều cuối cùng nó ghi lại — \"{{retry}}\" khởi động lại nó, và \"{{cleanRetry}}\" dựng lại môi trường nếu nó không quay lại."
   },
   "nav": {
+    "talk": "Trò chuyện",
     "clone": "Nhân bản",
     "design": "Thiết kế",
     "dub": "Lồng tiếng",
@@ -2725,6 +2726,13 @@
     "cta_design": "Mô tả một giọng trong Giọng nói ← để thiết kế nó",
     "new": "Giọng mới",
     "none_selected": "Chưa chọn giọng nào — hãy mô tả một giọng, thả tệp âm thanh, hoặc chọn bên dưới."
+  },
+  "gemma4_assistant": {
+    "title": "Trợ lý giọng nói Gemma 4", "subtitle": "Gemma nghe và suy nghĩ cục bộ; VoiceStudio đọc câu trả lời.",
+    "voice": "Giọng nói", "default_voice": "Giọng TTS mặc định", "persona": "Tính cách trợ lý", "default_persona": "Bạn là trợ lý giọng nói ngắn gọn và hữu ích. Hãy trả lời bằng ngôn ngữ của người dùng.",
+    "spoken_reply": "Phản hồi Gemma 4", "failed": "Lượt thoại thất bại.", "listening": "Đang nghe…",
+    "thinking": "Đang suy nghĩ…", "speaking": "Đang nói…", "ready": "Sẵn sàng", "empty": "Nhấn Trò chuyện, nói rồi nhấn Dừng.",
+    "clear": "Xóa", "stop": "Dừng", "talk": "Trò chuyện"
   },
   "convert": {
     "source_kicker": "Clip nguồn",

@@ -38,6 +38,7 @@ const TranscriptionsPage = lazy(() => import('./pages/Transcriptions'));
 const StoriesEditor = lazy(() => import('./components/StoriesEditor'));
 const AudiobookTab = lazy(() => import('./pages/AudiobookTab'));
 const ModelCataloguePage = lazy(() => import('./pages/ModelCatalogue'));
+const Gemma4Assistant = lazy(() => import('./pages/Gemma4Assistant'));
 
 import Header from './components/Header';
 import NavRail from './components/NavRail';
@@ -308,6 +309,7 @@ function App() {
     mode === 'contact' ||
     mode === 'transcriptions' ||
     mode === 'catalogue' ||
+    mode === 'talk' ||
     mode === 'stories' ||
     mode === 'audiobook' ||
     // Voice (studio) and Dub workspaces moved their saved voices /
@@ -1529,6 +1531,12 @@ function App() {
           <ErrorBoundary name="catalogue">
             <Suspense fallback={<LazyFallback />}>
               <ModelCataloguePage />
+            </Suspense>
+          </ErrorBoundary>
+        ) : mode === 'talk' ? (
+          <ErrorBoundary name="gemma4-assistant">
+            <Suspense fallback={<LazyFallback />}>
+              <Gemma4Assistant profiles={profiles} />
             </Suspense>
           </ErrorBoundary>
         ) : mode === 'stories' ? (

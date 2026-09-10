@@ -14,6 +14,7 @@
     "desktop": "ローカルの VoiceStudio バックエンドに接続できません。{{contact}} クラッシュ通知が出ていれば開いてください。または 設定 → ログ → バックエンド で最後に記録された内容を確認できます。「{{retry}}」で再起動、戻らない場合は「{{cleanRetry}}」で環境を再構築します。"
   },
   "nav": {
+    "talk": "会話",
     "clone": "複製",
     "design": "デザイン",
     "dub": "ダビング",
@@ -2725,6 +2726,13 @@
     "cta_design": "「声」← で説明してデザイン",
     "new": "新しい声",
     "none_selected": "声が選択されていません — 説明するか、音声をドロップするか、下から選んでください。"
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4 音声アシスタント", "subtitle": "Gemma がローカルで聞いて考え、VoiceStudio が回答を読み上げます。",
+    "voice": "読み上げ音声", "default_voice": "既定のTTS音声", "persona": "アシスタントの役割", "default_persona": "簡潔で役に立つ音声アシスタントです。ユーザーが使った言語で答えてください。",
+    "spoken_reply": "Gemma 4 の回答", "failed": "音声ターンに失敗しました。", "listening": "聞いています…",
+    "thinking": "考えています…", "speaking": "話しています…", "ready": "準備完了", "empty": "「会話」を押して話し、終わったら「停止」を押してください。",
+    "clear": "消去", "stop": "停止", "talk": "会話"
   },
   "convert": {
     "source_kicker": "ソースクリップ",

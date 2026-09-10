@@ -14,6 +14,7 @@
     "desktop": "로컬 VoiceStudio 백엔드에 연결할 수 없습니다. {{contact}} 크래시 알림이 떴다면 열어 보시고, 또는 설정 → 로그 → 백엔드 에서 마지막으로 기록된 내용을 확인하세요 — \"{{retry}}\"는 재시작하고, 돌아오지 않으면 \"{{cleanRetry}}\"가 환경을 다시 만듭니다."
   },
   "nav": {
+    "talk": "대화",
     "clone": "복제",
     "design": "디자인",
     "dub": "더빙",
@@ -3174,6 +3175,13 @@
     "cta_design": "음성 ← 에서 설명해 디자인하세요",
     "new": "새 음성",
     "none_selected": "선택된 음성이 없습니다 — 설명하거나, 오디오를 놓거나, 아래에서 선택하세요."
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4 음성 도우미", "subtitle": "Gemma가 로컬에서 듣고 생각하며 VoiceStudio가 답변을 말합니다.",
+    "voice": "말하기 음성", "default_voice": "기본 TTS 음성", "persona": "도우미 성격", "default_persona": "간결하고 유용한 음성 도우미입니다. 사용자가 쓴 언어로 답하세요.",
+    "spoken_reply": "Gemma 4 답변", "failed": "음성 대화에 실패했습니다.", "listening": "듣는 중…",
+    "thinking": "생각하는 중…", "speaking": "말하는 중…", "ready": "준비됨", "empty": "대화를 누르고 말한 다음 중지를 누르세요.",
+    "clear": "지우기", "stop": "중지", "talk": "대화"
   },
   "convert": {
     "source_kicker": "소스 클립",

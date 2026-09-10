@@ -14,6 +14,7 @@
     "desktop": "Når inte den lokala VoiceStudio-backenden. {{contact}} Öppna kraschnotisen om en visades, eller Inställningar → Loggar → Backend för det sista den loggade — ”{{retry}}” startar om den och ”{{cleanRetry}}” bygger om dess miljö om den inte kommer tillbaka."
   },
   "nav": {
+    "talk": "Prata",
     "clone": "Klona",
     "design": "Designa",
     "dub": "Dubba",
@@ -2725,6 +2726,13 @@
     "cta_design": "Beskriv en röst i Röst ← för att designa den",
     "new": "Ny röst",
     "none_selected": "Ingen röst vald — beskriv en, släpp ljud eller välj nedan."
+  },
+  "gemma4_assistant": {
+    "title": "Gemma 4-röstassistent", "subtitle": "Gemma lyssnar och tänker lokalt; VoiceStudio läser upp svaret.",
+    "voice": "Talröst", "default_voice": "Standardröst för TTS", "persona": "Assistentens personlighet", "default_persona": "Du är en kortfattad och hjälpsam röstassistent. Svara på användarens språk.",
+    "spoken_reply": "Svar från Gemma 4", "failed": "Röstomgången misslyckades.", "listening": "Lyssnar…",
+    "thinking": "Tänker…", "speaking": "Talar…", "ready": "Klar", "empty": "Tryck på Prata, tala och tryck sedan på Stopp.",
+    "clear": "Rensa", "stop": "Stopp", "talk": "Prata"
   },
   "convert": {
     "source_kicker": "Källklipp",

@@ -11,12 +11,17 @@ the frozen-backend fallback mirror it for their toolchains.
 **Highlights**
 
 - Voice cloning now starts with a clear upload-or-record choice, reveals recording and reference details only when needed, and keeps sampling controls under Production Overrides (#1817)
+- Talk to Gemma 4 E4B locally and hear its answer through any VoiceStudio TTS voice
 
 ### Changed
+
+- Added an isolated Gemma 4 E4B voice-assistant fork with native audio understanding and existing TTS profile playback
 
 ### Added
 
 ### Docs
+
+- Documented the local Transformers Serve setup and the half-duplex voice pipeline
 
 ### Fixed
 
