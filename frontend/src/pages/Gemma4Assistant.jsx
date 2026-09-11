@@ -401,9 +401,9 @@ export default function Gemma4Assistant({ profiles = [] }) {
                     />
                     <label className="inline-flex items-center gap-[6px] text-xs text-fg-muted">
                       <Download size={13} />
-                      <span className="sr-only">{t('common.download')}</span>
+                      <span className="sr-only">{t('audiobook.download')}</span>
                       <select
-                        aria-label={t('common.download')}
+                        aria-label={t('audiobook.download')}
                         className="rounded border border-[var(--color-border)] bg-bg-elev-2 px-[6px] py-[3px]"
                         disabled={downloadingAudioId === turn.id}
                         defaultValue=""
@@ -413,7 +413,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
                           event.target.value = '';
                         }}
                       >
-                        <option value="">{t('common.download')}</option>
+                        <option value="">{t('audiobook.download')}</option>
                         <option value="wav">WAV</option>
                         <option value="mp3">MP3</option>
                         <option value="ogg">OGG</option>

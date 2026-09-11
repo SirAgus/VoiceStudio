@@ -23,7 +23,9 @@ router = APIRouter()
 _FORMATS = {
     "mp3": ("libmp3lame", "audio/mpeg", "mp3"),
     "m4b": ("aac", "audio/mp4", "m4b"),
-    "ogg": ("libvorbis", "audio/ogg", "ogg"),
+    # Opus-in-Ogg is supported by WhatsApp and avoids libvorbis failures on
+    # some bundled Windows FFmpeg builds.
+    "ogg": ("libopus", "audio/ogg", "ogg"),
 }
 
 
