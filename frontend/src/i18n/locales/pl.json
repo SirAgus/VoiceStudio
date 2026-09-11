@@ -2732,7 +2732,7 @@
     "voice": "Głos odpowiedzi", "default_voice": "Domyślny głos TTS", "persona": "Osobowość asystenta", "default_persona": "Jesteś zwięzłym i pomocnym asystentem głosowym. Odpowiadaj w języku użytkownika.",
     "spoken_reply": "Odpowiedź Gemma 4", "failed": "Tura głosowa nie powiodła się.", "listening": "Słuchanie…",
     "thinking": "Myślenie…", "speaking": "Mówienie…", "ready": "Gotowe", "empty": "Naciśnij Rozmawiaj, powiedz coś, a następnie naciśnij Stop.",
-    "clear": "Wyczyść", "stop": "Stop", "talk": "Rozmawiaj"
+    "clear": "Wyczyść", "stop": "Stop", "talk": "Rozmawiaj", "write": "Wpisz wiadomość…", "send": "Wyślij"
   },
   "convert": {
     "source_kicker": "Klip źródłowy",

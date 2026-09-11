@@ -2732,7 +2732,7 @@
     "voice": "Talröst", "default_voice": "Standardröst för TTS", "persona": "Assistentens personlighet", "default_persona": "Du är en kortfattad och hjälpsam röstassistent. Svara på användarens språk.",
     "spoken_reply": "Svar från Gemma 4", "failed": "Röstomgången misslyckades.", "listening": "Lyssnar…",
     "thinking": "Tänker…", "speaking": "Talar…", "ready": "Klar", "empty": "Tryck på Prata, tala och tryck sedan på Stopp.",
-    "clear": "Rensa", "stop": "Stopp", "talk": "Prata"
+    "clear": "Rensa", "stop": "Stopp", "talk": "Prata", "write": "Skriv ett meddelande…", "send": "Skicka"
   },
   "convert": {
     "source_kicker": "Källklipp",

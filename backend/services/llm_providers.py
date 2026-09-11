@@ -153,11 +153,11 @@ _PROVIDERS: tuple[Provider, ...] = (
              base_url_env="OLLAMA_BASE_URL", model_env="OLLAMA_MODEL",
              signup_url="https://ollama.com",
              notes="Fully offline. Run `ollama pull llama3.1` first."),
-    Provider("gemma4-local", "Gemma 4 E4B (local)", "http://localhost:8000/v1",
-             "google/gemma-4-E4B-it", local=True,
+    Provider("gemma4-local", "Gemma 4 E4B Aggressive (local)", "http://localhost:8000/v1",
+             "HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive", local=True,
              base_url_env="GEMMA4_BASE_URL", model_env="GEMMA4_MODEL",
-             signup_url="https://huggingface.co/google/gemma-4-E4B-it",
-             notes="Fully offline after download. Run Transformers Serve with Gemma 4 E4B; supports native audio input and reasoning."),
+             signup_url="https://huggingface.co/HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive",
+             notes="Fully offline after download. Run llama-server with the Aggressive Q4_K_M GGUF and mmproj; supports native audio input."),
     # `local-model` is a placeholder, NOT a model id — LM Studio serves
     # whatever the user has loaded and rejects a name it does not know, which
     # is why translation failed here while Ollama (whose default `llama3.1` is

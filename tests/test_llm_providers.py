@@ -112,7 +112,7 @@ def test_local_provider_needs_no_key(lp):
 def test_gemma4_provider_contract(lp):
     p = lp.get_provider("gemma4-local")
     assert p.local is True
-    assert p.default_model == "google/gemma-4-E4B-it"
+    assert p.default_model == "HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive"
     assert p.default_base_url == "http://localhost:8000/v1"
 
 

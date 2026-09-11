@@ -2732,7 +2732,7 @@
     "voice": "Suara bicara", "default_voice": "Suara TTS bawaan", "persona": "Kepribadian asisten", "default_persona": "Anda adalah asisten suara yang ringkas dan membantu. Jawab dalam bahasa pengguna.",
     "spoken_reply": "Jawaban Gemma 4", "failed": "Giliran suara gagal.", "listening": "Mendengarkan…",
     "thinking": "Berpikir…", "speaking": "Berbicara…", "ready": "Siap", "empty": "Tekan Bicara, ucapkan sesuatu, lalu tekan Berhenti.",
-    "clear": "Bersihkan", "stop": "Berhenti", "talk": "Bicara"
+    "clear": "Bersihkan", "stop": "Berhenti", "talk": "Bicara", "write": "Ketik pesan…", "send": "Kirim"
   },
   "convert": {
     "source_kicker": "Klip sumber",

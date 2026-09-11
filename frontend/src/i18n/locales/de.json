@@ -2732,7 +2732,7 @@
     "voice": "Sprechstimme", "default_voice": "Standard-TTS-Stimme", "persona": "Assistentenrolle", "default_persona": "Du bist ein knapper, hilfreicher Sprachassistent. Antworte in der Sprache des Benutzers.",
     "spoken_reply": "Gemma-4-Antwort", "failed": "Der Sprachdialog ist fehlgeschlagen.", "listening": "Hört zu…",
     "thinking": "Denkt nach…", "speaking": "Spricht…", "ready": "Bereit", "empty": "Sprechen drücken, sprechen und dann Stopp drücken.",
-    "clear": "Leeren", "stop": "Stopp", "talk": "Sprechen"
+    "clear": "Leeren", "stop": "Stopp", "talk": "Sprechen", "write": "Nachricht schreiben…", "send": "Senden"
   },
   "convert": {
     "source_kicker": "Quellclip",

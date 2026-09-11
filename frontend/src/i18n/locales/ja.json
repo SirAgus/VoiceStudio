@@ -2732,7 +2732,7 @@
     "voice": "読み上げ音声", "default_voice": "既定のTTS音声", "persona": "アシスタントの役割", "default_persona": "簡潔で役に立つ音声アシスタントです。ユーザーが使った言語で答えてください。",
     "spoken_reply": "Gemma 4 の回答", "failed": "音声ターンに失敗しました。", "listening": "聞いています…",
     "thinking": "考えています…", "speaking": "話しています…", "ready": "準備完了", "empty": "「会話」を押して話し、終わったら「停止」を押してください。",
-    "clear": "消去", "stop": "停止", "talk": "会話"
+    "clear": "消去", "stop": "停止", "talk": "会話", "write": "メッセージを入力…", "send": "送信"
   },
   "convert": {
     "source_kicker": "ソースクリップ",

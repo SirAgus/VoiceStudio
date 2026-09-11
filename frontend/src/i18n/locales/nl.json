@@ -2732,7 +2732,7 @@
     "voice": "Spreekstem", "default_voice": "Standaard TTS-stem", "persona": "Assistentpersona", "default_persona": "Je bent een beknopte, behulpzame spraakassistent. Antwoord in de taal van de gebruiker.",
     "spoken_reply": "Antwoord van Gemma 4", "failed": "De spraakbeurt is mislukt.", "listening": "Luisteren…",
     "thinking": "Nadenken…", "speaking": "Spreken…", "ready": "Gereed", "empty": "Druk op Praten, spreek en druk daarna op Stoppen.",
-    "clear": "Wissen", "stop": "Stoppen", "talk": "Praten"
+    "clear": "Wissen", "stop": "Stoppen", "talk": "Praten", "write": "Typ een bericht…", "send": "Versturen"
   },
   "convert": {
     "source_kicker": "Bronclip",

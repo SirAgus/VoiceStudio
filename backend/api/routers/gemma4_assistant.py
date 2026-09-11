@@ -8,13 +8,14 @@ from typing import Annotated, Any
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from pydantic import BaseModel, Field
 
 from api.dependencies import require_local
 
 router = APIRouter(prefix="/gemma4-assistant", tags=["gemma4-assistant"])
 logger = logging.getLogger("omnivoice.gemma4_assistant")
 
-MODEL_ID = "google/gemma-4-E4B-it"
+MODEL_ID = "HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive"
 MAX_AUDIO_BYTES = 20 * 1024 * 1024
 MAX_HISTORY_TURNS = 12
 DEFAULT_PERSONA = "You are a concise, helpful voice assistant. Reply in the language used by the user."
@@ -24,6 +25,12 @@ _AUDIO_FORMATS = {
     "audio/mpeg": "mp3",
     "audio/mp3": "mp3",
 }
+
+
+class TextTurnRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=8000)
+    persona: str = DEFAULT_PERSONA
+    history: list[dict[str, str]] = Field(default_factory=list)
 
 
 def _backend():
@@ -88,6 +95,40 @@ def _transcription_messages(audio_b64: str, audio_format: str) -> list[dict[str,
     }]
 
 
+async def _answer(
+    backend: Any,
+    transcript: str,
+    persona: str,
+    history: list[dict[str, str]],
+) -> dict[str, str]:
+    import asyncio
+
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": (persona.strip() or DEFAULT_PERSONA)[:8000]},
+        *history,
+        {"role": "user", "content": transcript},
+    ]
+    reply = await asyncio.to_thread(
+        backend.chat_messages,
+        messages=messages,
+        temperature=0.6,
+    )
+    if not reply.strip():
+        raise RuntimeError("Gemma 4 returned an empty response")
+    return {"transcript": transcript, "reply": reply.strip(), "model": backend.model_name}
+
+
+def _unavailable(exc: Exception) -> HTTPException:
+    logger.warning("Gemma 4 assistant turn failed: %s", exc)
+    return HTTPException(
+        status_code=503,
+        detail=(
+            "The local assistant model is unavailable. Run `bun run dev:gemma4-server` "
+            "from the VoiceStudio checkout."
+        ),
+    )
+
+
 @router.get("/status", dependencies=[Depends(require_local)])
 def status() -> dict[str, Any]:
     """Report configuration without loading or downloading model weights."""
@@ -100,6 +141,25 @@ def status() -> dict[str, Any]:
         "base_url": llm_providers.resolve_base_url(provider),
         "provider": provider.id,
     }
+
+
+@router.post("/text-turn", dependencies=[Depends(require_local)])
+async def text_turn(request: TextTurnRequest) -> dict[str, str]:
+    """Reason over a typed message and return text for local TTS playback."""
+    text = request.text.strip()
+    if not text:
+        raise HTTPException(status_code=422, detail="text must not be blank")
+    try:
+        return await _answer(
+            _backend(),
+            text,
+            request.persona,
+            _history(json.dumps(request.history)),
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise _unavailable(exc) from exc
 
 
 @router.post("/turn", dependencies=[Depends(require_local)])
@@ -131,28 +191,8 @@ async def turn(
         if not transcript:
             raise RuntimeError("Gemma 4 returned an empty transcription")
 
-        messages: list[dict[str, str]] = [
-            {"role": "system", "content": (persona.strip() or DEFAULT_PERSONA)[:8000]},
-            *history,
-            {"role": "user", "content": transcript},
-        ]
-        reply = await asyncio.to_thread(
-            backend.chat_messages,
-            messages=messages,
-            temperature=0.6,
-        )
-        if not reply.strip():
-            raise RuntimeError("Gemma 4 returned an empty response")
+        return await _answer(backend, transcript, persona, history)
     except HTTPException:
         raise
     except Exception as exc:
-        logger.warning("Gemma 4 assistant turn failed: %s", exc)
-        raise HTTPException(
-            status_code=503,
-            detail=(
-                "Gemma 4 E4B is unavailable. Start `transformers serve "
-                "google/gemma-4-E4B-it --reasoning on` on localhost:8000."
-            ),
-        ) from exc
-
-    return {"transcript": transcript, "reply": reply.strip(), "model": backend.model_name}
+        raise _unavailable(exc) from exc

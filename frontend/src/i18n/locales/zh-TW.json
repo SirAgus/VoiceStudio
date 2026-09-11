@@ -2732,7 +2732,7 @@
     "voice": "朗讀聲音", "default_voice": "預設 TTS 聲音", "persona": "助理角色", "default_persona": "你是一名簡潔、樂於助人的語音助理。請使用使用者所用的語言回答。",
     "spoken_reply": "Gemma 4 回答", "failed": "語音對話失敗。", "listening": "正在聆聽…",
     "thinking": "正在思考…", "speaking": "正在說話…", "ready": "準備就緒", "empty": "按「對話」開始說話，說完後按「停止」。",
-    "clear": "清除", "stop": "停止", "talk": "對話"
+    "clear": "清除", "stop": "停止", "talk": "對話", "write": "輸入訊息…", "send": "傳送"
   },
   "convert": {
     "source_kicker": "來源音訊",

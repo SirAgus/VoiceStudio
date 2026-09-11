@@ -2732,7 +2732,7 @@
     "voice": "Voix de réponse", "default_voice": "Voix TTS par défaut", "persona": "Personnalité de l’assistant", "default_persona": "Vous êtes un assistant vocal concis et serviable. Répondez dans la langue de l’utilisateur.",
     "spoken_reply": "Réponse de Gemma 4", "failed": "Le tour vocal a échoué.", "listening": "Écoute…",
     "thinking": "Réflexion…", "speaking": "Parle…", "ready": "Prêt", "empty": "Appuyez sur Parler, parlez, puis appuyez sur Arrêter.",
-    "clear": "Effacer", "stop": "Arrêter", "talk": "Parler"
+    "clear": "Effacer", "stop": "Arrêter", "talk": "Parler", "write": "Écrivez un message…", "send": "Envoyer"
   },
   "convert": {
     "source_kicker": "Clip source",

@@ -11,19 +11,20 @@ the frozen-backend fallback mirror it for their toolchains.
 **Highlights**
 
 - Voice cloning now starts with a clear upload-or-record choice, reveals recording and reference details only when needed, and keeps sampling controls under Production Overrides (#1817)
-- Talk to Gemma 4 E4B locally and hear its answer through any VoiceStudio TTS voice
+- Talk to the HauhauCS Gemma 4 E4B Aggressive model locally and hear its answer through any VoiceStudio TTS voice
 
 ### Changed
 
-- Added an isolated Gemma 4 E4B voice-assistant fork with native audio understanding and existing TTS profile playback
+- Added an isolated HauhauCS Gemma 4 E4B Aggressive assistant with voice or typed input, visible chat history, and replayable TTS profile responses
 - Gemma, the VoiceStudio API, and the browser UI can now start together with one development command
 
 ### Added
 
 ### Docs
 
-- Documented the local Transformers Serve setup and the half-duplex voice pipeline
+- Documented the local llama.cpp setup, Aggressive GGUF requirements, and half-duplex voice pipeline
 - Documented the single-command Gemma development startup
+- Documented local model substitution and the additional audio-input requirement for microphone turns
 
 ### Fixed
 

@@ -2732,7 +2732,7 @@
     "voice": "Konuşma sesi", "default_voice": "Varsayılan TTS sesi", "persona": "Asistan kişiliği", "default_persona": "Kısa ve yararlı bir sesli asistansın. Kullanıcının dilinde yanıt ver.",
     "spoken_reply": "Gemma 4 yanıtı", "failed": "Sesli konuşma başarısız oldu.", "listening": "Dinliyor…",
     "thinking": "Düşünüyor…", "speaking": "Konuşuyor…", "ready": "Hazır", "empty": "Konuş'a basın, konuşun ve ardından Durdur'a basın.",
-    "clear": "Temizle", "stop": "Durdur", "talk": "Konuş"
+    "clear": "Temizle", "stop": "Durdur", "talk": "Konuş", "write": "Bir mesaj yazın…", "send": "Gönder"
   },
   "convert": {
     "source_kicker": "Kaynak klip",

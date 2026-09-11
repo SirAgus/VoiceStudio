@@ -63,6 +63,36 @@ def test_voice_turn_rejects_unsupported_audio(monkeypatch):
     assert response.status_code == 415
 
 
+def test_text_turn_reasons_once_and_preserves_history(monkeypatch):
+    client, backend = _client(monkeypatch)
+    response = client.post(
+        "/gemma4-assistant/text-turn",
+        json={
+            "text": "  Cuéntame algo  ",
+            "persona": "Responde brevemente.",
+            "history": [{"role": "assistant", "content": "Buenos días"}],
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "transcript": "Cuéntame algo",
+        "reply": "Hola, mundo",
+        "model": gemma4_assistant.MODEL_ID,
+    }
+    assert backend.calls[0]["messages"] == [
+        {"role": "system", "content": "Responde brevemente."},
+        {"role": "assistant", "content": "Buenos días"},
+        {"role": "user", "content": "Cuéntame algo"},
+    ]
+
+
+def test_text_turn_rejects_blank_messages(monkeypatch):
+    client, _ = _client(monkeypatch)
+    response = client.post("/gemma4-assistant/text-turn", json={"text": "   "})
+    assert response.status_code == 422
+
+
 def test_gemma4_backend_refuses_remote_audio_destination(monkeypatch):
     monkeypatch.setenv("GEMMA4_BASE_URL", "https://remote.example/v1")
     with pytest.raises(RuntimeError, match="loopback"):

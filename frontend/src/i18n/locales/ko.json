@@ -3181,7 +3181,7 @@
     "voice": "말하기 음성", "default_voice": "기본 TTS 음성", "persona": "도우미 성격", "default_persona": "간결하고 유용한 음성 도우미입니다. 사용자가 쓴 언어로 답하세요.",
     "spoken_reply": "Gemma 4 답변", "failed": "음성 대화에 실패했습니다.", "listening": "듣는 중…",
     "thinking": "생각하는 중…", "speaking": "말하는 중…", "ready": "준비됨", "empty": "대화를 누르고 말한 다음 중지를 누르세요.",
-    "clear": "지우기", "stop": "중지", "talk": "대화"
+    "clear": "지우기", "stop": "중지", "talk": "대화", "write": "메시지를 입력하세요…", "send": "보내기"
   },
   "convert": {
     "source_kicker": "소스 클립",
