@@ -291,15 +291,15 @@ export default function Gemma4Assistant({ profiles = [] }) {
 
   return (
     <div
-      className="h-full min-h-0 overflow-y-auto px-4 py-5 font-sans text-[#f5f0eb] md:px-8 md:py-6"
+      className="h-full min-h-0 overflow-hidden px-4 py-5 font-sans text-[#f5f0eb] md:px-8 md:py-6"
       style={{
         backgroundColor: '#0b0908',
         backgroundImage:
           'radial-gradient(at 0% 0%, rgba(55,35,24,.55) 0, transparent 50%), radial-gradient(at 100% 100%, rgba(17,10,7,.8) 0, transparent 50%), radial-gradient(at 50% 0%, rgba(110,68,40,.2) 0, transparent 50%)',
       }}
     >
-      <div className="mx-auto flex min-h-full w-full max-w-[980px] flex-col gap-5 pb-28">
-        <header className="flex items-start justify-between gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:p-6">
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-[980px] flex-col gap-5">
+        <header className="flex shrink-0 items-start justify-between gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:p-6">
           <div className="flex items-start gap-4">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-stone-700/70 bg-stone-800 text-amber-400 shadow-sm">
               <Bot size={22} />
@@ -319,7 +319,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
           </div>
         </header>
 
-        <Panel className="grid gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:grid-cols-2">
+        <Panel className="grid shrink-0 gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:grid-cols-2">
           <div className="flex items-end gap-[8px] md:col-span-2">
             <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
               {t('gemma4_assistant.threads')}
@@ -386,7 +386,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
           </label>
         </Panel>
 
-        <section className="flex min-h-[360px] flex-1 flex-col gap-3 rounded-2xl border border-white/[.09] bg-[#17120f]/90 p-4 shadow-[0_20px_40px_rgba(0,0,0,.45)] backdrop-blur-xl md:p-5">
+        <section className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-2xl border border-white/[.09] bg-[#17120f]/90 p-4 shadow-[0_20px_40px_rgba(0,0,0,.45)] backdrop-blur-xl md:p-5">
           {turns.length === 0 ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-[8px] text-center text-fg-muted">
               <Brain size={34} className="opacity-40" />
@@ -463,7 +463,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
         </section>
 
         <form
-          className="rounded-2xl border border-white/[.09] bg-[#14100e]/95 p-3 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl"
+          className="shrink-0 rounded-2xl border border-white/[.09] bg-[#14100e]/95 p-3 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl"
           onSubmit={handleTextSubmit}
         >
           <div className="mb-3 flex items-center justify-between px-2 text-xs font-semibold text-stone-300">
@@ -512,7 +512,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
           </div>
         </form>
 
-        <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[.08] pt-3 text-[11px] text-stone-500">
+        <footer className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-white/[.08] pt-3 text-[11px] text-stone-500">
           <Button
             variant={recording.isRecording ? 'danger' : 'primary'}
             className="hidden"
