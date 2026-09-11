@@ -220,7 +220,7 @@ function DonateHeart() {
   return <span style={{ fontSize: 14, lineHeight: 1 }}>{pick}</span>;
 }
 
-export default function LogsFooter() {
+export default function LogsFooter({ compactGemma = false }) {
   // Always start collapsed on every launch — per-session toggling works
   // but nothing persists. Kill the legacy key on the way out so users
   // who had it stored as "open" before aren't stuck on the next load.
@@ -475,9 +475,11 @@ export default function LogsFooter() {
 
   return (
     <div
-      className={['logs-footer', collapsed ? 'logs-footer--collapsed' : 'logs-footer--open'].join(
-        ' ',
-      )}
+      className={[
+        'logs-footer',
+        compactGemma ? 'gemma-footer' : '',
+        collapsed ? 'logs-footer--collapsed' : 'logs-footer--open',
+      ].join(' ')}
       style={collapsed ? undefined : { height }}
     >
       {!collapsed && (
@@ -531,7 +533,13 @@ export default function LogsFooter() {
             </>
           )}
         </div>
-        <div className="flex items-center gap-[4px] shrink-0">
+        {compactGemma && (
+          <div className="gemma-footer-metrics hidden items-center gap-4 text-[11px] font-medium md:flex">
+            <span className="inline-flex items-center gap-1">◉ Gemma-4-7B-Instruct</span>
+            <span className="inline-flex items-center gap-1">▣ VRAM: 3.8 / 8.0 GB</span>
+          </div>
+        )}
+        <div className="logs-footer-actions flex items-center gap-[4px] shrink-0">
           {!collapsed && (
             <div className="flex items-center gap-[2px]">
               <button

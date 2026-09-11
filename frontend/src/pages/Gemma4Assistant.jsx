@@ -349,80 +349,84 @@ export default function Gemma4Assistant({ profiles = [] }) {
         </header>
 
         {configOpen ? (
-          <Panel className="grid shrink-0 gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:grid-cols-2">
-            <div className="flex items-end gap-[8px] md:col-span-2">
-              <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
+          <Panel className="shrink-0 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="flex items-end gap-[8px]">
+                <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
+                  <span className="flex items-center gap-1.5">
+                    <GitBranch size={13} className="text-amber-400" />{' '}
+                    {t('gemma4_assistant.threads')}
+                  </span>
+                  <Select
+                    className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
+                    value={currentThreadId}
+                    disabled={threadsLoading || isBusy}
+                    onChange={async (event) => {
+                      try {
+                        await openThread(event.target.value);
+                      } catch (error) {
+                        toast.error(error?.message || t('gemma4_assistant.failed'));
+                      }
+                    }}
+                  >
+                    {threads.map((thread) => (
+                      <option key={thread.id} value={thread.id}>
+                        {thread.title || t('gemma4_assistant.new_thread')}
+                      </option>
+                    ))}
+                  </Select>
+                </label>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="rounded-xl border border-stone-700 bg-stone-800 text-stone-200"
+                  disabled={isBusy}
+                  onClick={createThread}
+                >
+                  {t('gemma4_assistant.new_thread')}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="rounded-xl border border-red-500/20 bg-red-500/10 text-red-400"
+                  disabled={isBusy}
+                  onClick={removeThread}
+                >
+                  <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
+                </Button>
+              </div>
+              <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
                 <span className="flex items-center gap-1.5">
-                  <GitBranch size={13} className="text-amber-400" /> {t('gemma4_assistant.threads')}
+                  <Volume2 size={13} className="text-amber-400" /> {t('gemma4_assistant.voice')}
                 </span>
                 <Select
                   className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
-                  value={currentThreadId}
-                  disabled={threadsLoading || isBusy}
-                  onChange={async (event) => {
-                    try {
-                      await openThread(event.target.value);
-                    } catch (error) {
-                      toast.error(error?.message || t('gemma4_assistant.failed'));
-                    }
-                  }}
+                  value={profileId || profiles[0]?.id || ''}
+                  onChange={(event) => setProfileId(event.target.value)}
                 >
-                  {threads.map((thread) => (
-                    <option key={thread.id} value={thread.id}>
-                      {thread.title || t('gemma4_assistant.new_thread')}
+                  <option value="">{t('gemma4_assistant.default_voice')}</option>
+                  {profiles.map((profile) => (
+                    <option key={profile.id} value={profile.id}>
+                      {profile.name || profile.id}
                     </option>
                   ))}
                 </Select>
               </label>
-              <Button
-                type="button"
-                variant="ghost"
-                className="rounded-xl border border-stone-700 bg-stone-800 text-stone-200"
-                disabled={isBusy}
-                onClick={createThread}
-              >
-                {t('gemma4_assistant.new_thread')}
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                className="rounded-xl border border-red-500/20 bg-red-500/10 text-red-400"
-                disabled={isBusy}
-                onClick={removeThread}
-              >
-                <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
-              </Button>
-            </div>
-            <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
-              <span className="flex items-center gap-1.5">
-                <Volume2 size={13} className="text-amber-400" /> {t('gemma4_assistant.voice')}
-              </span>
-              <Select
-                className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
-                value={profileId || profiles[0]?.id || ''}
-                onChange={(event) => setProfileId(event.target.value)}
-              >
-                <option value="">{t('gemma4_assistant.default_voice')}</option>
-                {profiles.map((profile) => (
-                  <option key={profile.id} value={profile.id}>
-                    {profile.name || profile.id}
-                  </option>
-                ))}
-              </Select>
-            </label>
-            <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400 md:col-span-2">
-              <span className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <Sparkles size={13} className="text-amber-400" /> {t('gemma4_assistant.persona')}
+              <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400 md:col-span-2">
+                <span className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Sparkles size={13} className="text-amber-400" />{' '}
+                    {t('gemma4_assistant.persona')}
+                  </span>
+                  <small className="font-normal text-stone-500">Editado localmente</small>
                 </span>
-                <small className="font-normal text-stone-500">Editado localmente</small>
-              </span>
-              <Textarea
-                rows={2}
-                value={persona}
-                onChange={(event) => setPersona(event.target.value)}
-              />
-            </label>
+                <Textarea
+                  rows={2}
+                  value={persona}
+                  onChange={(event) => setPersona(event.target.value)}
+                />
+              </label>
+            </div>
           </Panel>
         ) : null}
 
@@ -555,6 +559,12 @@ export default function Gemma4Assistant({ profiles = [] }) {
             </button>
             <span className="flex items-center gap-2 text-stone-400">
               <Volume2 size={15} /> {t('gemma4_assistant.audio_reply')}
+              <SettingsToggle
+                checked={audioEnabled}
+                disabled={isBusy}
+                aria-label={t('gemma4_assistant.audio_reply')}
+                onChange={setAudioEnabled}
+              />
             </span>
           </div>
           <div className="flex items-end gap-[10px]">
@@ -580,12 +590,6 @@ export default function Gemma4Assistant({ profiles = [] }) {
             >
               <Send size={16} /> {t('gemma4_assistant.send')}
             </Button>
-            <SettingsToggle
-              checked={audioEnabled}
-              disabled={isBusy}
-              aria-label={t('gemma4_assistant.audio_reply')}
-              onChange={setAudioEnabled}
-            />
           </div>
         </form>
 

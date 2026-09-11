@@ -1358,13 +1358,13 @@ function App() {
   return (
     <div
       ref={observeShell}
-      className={appShellClasses({
+      className={`${appShellClasses({
         navStyle,
         navRailSide,
         isSidebarCollapsed,
         hideSidebar,
         shellSizeClass,
-      })}
+      })} ${mode === 'talk' ? 'gemma-shell' : ''}`}
       style={{ '--ui-scale': effectiveUiScale }}
     >
       {pendingTrimFile && (
@@ -1900,7 +1900,7 @@ function App() {
 
       {/* ═══ BOTTOM LOGS PANEL (VSCode-style) ═══ */}
       <Suspense fallback={null}>
-        <LogsFooter />
+        <LogsFooter compactGemma={mode === 'talk'} />
       </Suspense>
     </div>
   );

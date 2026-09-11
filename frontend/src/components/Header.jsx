@@ -322,12 +322,27 @@ export default function Header({
           LogsFooter bar so all app-wide chrome sits together. */}
       <div className="flex items-center justify-end gap-3 justify-self-end min-w-0 overflow-visible">
         <NotificationPanel onNavigate={setMode} />
+        {mode === 'talk' && (
+          <span className="gemma-header-local hidden items-center gap-1.5 rounded-full border border-stone-700/70 bg-stone-800/70 px-3 py-1 text-[11px] font-medium text-stone-300 sm:inline-flex">
+            Gemma-4 Local
+          </span>
+        )}
         <WaveBars
           color={view.accent}
           active={modelStatus === 'ready' || modelStatus === 'loading'}
         />
+        {mode === 'talk' && (
+          <Badge
+            tone="success"
+            size="xs"
+            dot
+            className="gemma-header-ready [border:1px_solid_rgba(16,185,129,.35)] bg-emerald-500/10! font-semibold!"
+          >
+            {t('gemma4_assistant.ready')}
+          </Badge>
+        )}
         {sysStats && (
-          <div className="flex items-center gap-[10px] [font-family:var(--chrome-font-mono)] text-[10.5px] text-[var(--chrome-fg-dim)] bg-transparent h-[var(--chrome-pill-h)] whitespace-nowrap shrink overflow-hidden tabular-nums slashed-zero max-[851px]:hidden!">
+          <div className="gemma-header-sysstats flex items-center gap-[10px] [font-family:var(--chrome-font-mono)] text-[10.5px] text-[var(--chrome-fg-dim)] bg-transparent h-[var(--chrome-pill-h)] whitespace-nowrap shrink overflow-hidden tabular-nums slashed-zero max-[851px]:hidden!">
             {showLiveStats && (
               <>
                 <span className="max-[1081px]:hidden">

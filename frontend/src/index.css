@@ -3559,6 +3559,190 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   0%, 100% { opacity: 0.7; transform: scale(1); }
   50%      { opacity: 1;   transform: scale(1.08); }
 }
+
+/* ═══ GEMMA 4 SHELL ═══
+   The Gemma assistant has its own product surface: espresso background,
+   compact 80px rail, and a thin status footer. Keep this scoped to `talk`
+   so the rest of VoiceStudio retains its normal chrome. */
+.app-container.gemma-shell {
+  --chrome-bg: #0e0b09;
+  --chrome-fg: #f4eee8;
+  --chrome-fg-muted: #b9aaa0;
+  --chrome-fg-dim: #82736a;
+  --chrome-border: rgba(255, 255, 255, 0.09);
+  --chrome-border-strong: rgba(255, 255, 255, 0.16);
+  --chrome-hover-bg: rgba(255, 255, 255, 0.07);
+  --chrome-accent: #d97706;
+  --chrome-accent-bg: rgba(217, 119, 6, 0.14);
+  --chrome-accent-border: rgba(217, 119, 6, 0.38);
+  --chrome-severity-ok: #10b981;
+  grid-template-columns: 80px minmax(0, 1fr);
+  background: #0b0908;
+}
+
+.app-container.gemma-shell > .nav-rail {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  width: 80px;
+  box-sizing: border-box;
+  padding-top: 12px;
+  padding-bottom: 14px;
+  background: rgba(14, 11, 9, 0.96);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 0;
+}
+
+.app-container.gemma-shell > .main-content {
+  grid-column: 2;
+  grid-row: 2;
+  background: #0b0908;
+  overflow: hidden;
+}
+
+.app-container.gemma-shell .header-area {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 50px;
+  padding: 0 22px;
+  background: rgba(14, 11, 9, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-container.gemma-shell .header-area h1,
+.app-container.gemma-shell .header-area p {
+  color: var(--chrome-fg);
+}
+
+.app-container.gemma-shell .header-area button,
+.app-container.gemma-shell .header-area [role='button'] {
+  color: var(--chrome-fg-muted);
+}
+
+.app-container.gemma-shell .gemma-header-sysstats {
+  display: none;
+}
+
+.app-container.gemma-shell .gemma-header-local {
+  color: #c8b8ad;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.app-container.gemma-shell .gemma-header-ready {
+  color: #34d399;
+}
+
+.app-container.gemma-shell > .logs-footer {
+  grid-column: 2;
+  grid-row: 4;
+  min-height: 28px;
+  height: 28px !important;
+  background: rgba(14, 11, 9, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-container.gemma-shell .logs-footer--open {
+  min-height: 28px;
+}
+
+.app-container.gemma-shell .logs-footer__body {
+  display: none;
+}
+
+.app-container.gemma-shell .logs-footer > div:first-child {
+  height: 28px;
+  border-bottom: 0;
+}
+
+.app-container.gemma-shell .logs-footer button:hover {
+  background: rgba(217, 119, 6, 0.12);
+}
+
+.app-container.gemma-shell .gemma-footer-metrics {
+  color: #9f9086;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.app-container.gemma-shell .gemma-footer-metrics span:first-child {
+  color: #d9c7ba;
+}
+
+.app-container.gemma-shell .gemma-footer-metrics span:first-child::first-letter {
+  color: #f59e0b;
+}
+
+.app-container.gemma-shell .gemma-footer .logs-footer-actions > * {
+  display: none;
+}
+
+.app-container.gemma-shell .gemma-footer .logs-footer-actions::after {
+  content: 'v0.5.2   VoiceStudio Engine   ✓';
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  color: #9f9086;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.gemma-nav-rail .gemma-rail-brand {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin-bottom: 8px;
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #6f472e 0%, #2a1a12 100%);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.gemma-nav-rail > div:nth-child(2) {
+  width: 44px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gemma-nav-rail .group {
+  width: 40px;
+  height: 40px;
+  color: #8c7a6f;
+  border-radius: 12px;
+}
+
+.gemma-nav-rail .group:hover {
+  color: #f4eee8;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.gemma-nav-rail .group[style*='#d97706'] {
+  color: #f59e0b;
+}
+
+.gemma-nav-rail .group:has(svg) {
+  transition: color 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.gemma-nav-rail .group[aria-current='page'],
+.gemma-nav-rail .group.bg-\[color-mix\] {
+  background: rgba(217, 119, 6, 0.16);
+  border-color: rgba(217, 119, 6, 0.42);
+}
+
+.gemma-nav-rail > div:last-child {
+  gap: 8px;
+}
+
+.gemma-nav-rail > div:last-child button:last-child {
+  display: none;
+}
 /* Donation-moment popover (DonateMomentPopover.jsx): Clippy-esque bounce-in,
    collapsing to a plain fade under prefers-reduced-motion (the JSX swaps the
    animation via motion-reduce:). donate-heart-pulse is the gentle attention
