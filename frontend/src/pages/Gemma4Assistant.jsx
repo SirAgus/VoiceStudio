@@ -290,27 +290,41 @@ export default function Gemma4Assistant({ profiles = [] }) {
         : t('gemma4_assistant.ready');
 
   return (
-    <div className="h-full min-h-0 overflow-y-auto bg-[var(--chrome-bg)] px-[34px] py-[30px] font-sans">
-      <div className="mx-auto flex min-h-full w-full max-w-[980px] flex-col gap-[18px]">
-        <header className="flex items-center gap-[12px] border-b border-[var(--chrome-border)] pb-[18px]">
-          <span className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--chrome-accent)_14%,transparent)] text-[var(--chrome-accent)]">
-            <Bot size={22} />
-          </span>
-          <div>
-            <h1 className="m-0 text-[1.8rem] font-normal text-[var(--chrome-fg)]">
-              {t('gemma4_assistant.title')}
-            </h1>
-            <p className="m-0 mt-[4px] text-sm text-[var(--chrome-fg-dim)]">
-              {t('gemma4_assistant.subtitle')}
-            </p>
+    <div
+      className="h-full min-h-0 overflow-y-auto px-4 py-5 font-sans text-[#f5f0eb] md:px-8 md:py-6"
+      style={{
+        backgroundColor: '#0b0908',
+        backgroundImage:
+          'radial-gradient(at 0% 0%, rgba(55,35,24,.55) 0, transparent 50%), radial-gradient(at 100% 100%, rgba(17,10,7,.8) 0, transparent 50%), radial-gradient(at 50% 0%, rgba(110,68,40,.2) 0, transparent 50%)',
+      }}
+    >
+      <div className="mx-auto flex min-h-full w-full max-w-[980px] flex-col gap-5 pb-28">
+        <header className="flex items-start justify-between gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:p-6">
+          <div className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-stone-700/70 bg-stone-800 text-amber-400 shadow-sm">
+              <Bot size={22} />
+            </span>
+            <div>
+              <h1 className="m-0 text-xl font-bold tracking-tight text-stone-100 md:text-2xl">
+                {t('gemma4_assistant.title')}
+              </h1>
+              <p className="m-0 mt-1 text-xs text-stone-400 md:text-sm">
+                {t('gemma4_assistant.subtitle')}
+              </p>
+            </div>
+          </div>
+          <div className="hidden items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-400 sm:flex">
+            <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-400" />
+            {t('gemma4_assistant.ready')}
           </div>
         </header>
 
-        <Panel className="grid gap-[14px] p-[18px] md:grid-cols-2">
+        <Panel className="grid gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:grid-cols-2">
           <div className="flex items-end gap-[8px] md:col-span-2">
-            <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-sm text-fg-muted">
+            <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
               {t('gemma4_assistant.threads')}
               <Select
+                className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
                 value={currentThreadId}
                 disabled={threadsLoading || isBusy}
                 onChange={async (event) => {
@@ -328,16 +342,29 @@ export default function Gemma4Assistant({ profiles = [] }) {
                 ))}
               </Select>
             </label>
-            <Button type="button" variant="ghost" disabled={isBusy} onClick={createThread}>
+            <Button
+              type="button"
+              variant="ghost"
+              className="rounded-xl border border-stone-700 bg-stone-800 text-stone-200"
+              disabled={isBusy}
+              onClick={createThread}
+            >
               {t('gemma4_assistant.new_thread')}
             </Button>
-            <Button type="button" variant="ghost" disabled={isBusy} onClick={removeThread}>
+            <Button
+              type="button"
+              variant="ghost"
+              className="rounded-xl border border-red-500/20 bg-red-500/10 text-red-400"
+              disabled={isBusy}
+              onClick={removeThread}
+            >
               <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
             </Button>
           </div>
-          <label className="flex flex-col gap-[6px] text-sm text-fg-muted">
+          <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
             {t('gemma4_assistant.voice')}
             <Select
+              className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
               value={profileId || profiles[0]?.id || ''}
               onChange={(event) => setProfileId(event.target.value)}
             >
@@ -349,7 +376,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
               ))}
             </Select>
           </label>
-          <label className="flex flex-col gap-[6px] text-sm text-fg-muted">
+          <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
             {t('gemma4_assistant.persona')}
             <Textarea
               rows={2}
@@ -359,7 +386,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
           </label>
         </Panel>
 
-        <section className="flex min-h-[300px] flex-1 flex-col gap-[10px] rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-bg-elev-1 p-[18px]">
+        <section className="flex min-h-[360px] flex-1 flex-col gap-3 rounded-2xl border border-white/[.09] bg-[#17120f]/90 p-4 shadow-[0_20px_40px_rgba(0,0,0,.45)] backdrop-blur-xl md:p-5">
           {turns.length === 0 ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-[8px] text-center text-fg-muted">
               <Brain size={34} className="opacity-40" />
@@ -372,8 +399,8 @@ export default function Gemma4Assistant({ profiles = [] }) {
                 aria-busy={turn.isStreaming || undefined}
                 className={`max-w-[82%] rounded-[16px] px-[14px] py-[10px] text-sm leading-relaxed ${
                   turn.role === 'user'
-                    ? 'ml-auto bg-[var(--color-brand)] text-white'
-                    : 'mr-auto border border-[var(--color-border)] bg-bg-elev-2 text-fg'
+                    ? 'ml-auto border border-[#8b5e3c] bg-[#6f472e] text-[#fdfbf7] shadow-md'
+                    : 'mr-auto border border-[#4a3022]/70 bg-[#17120f]/95 text-stone-100 shadow-md'
                 }`}
               >
                 {turn.isStreaming ? (
@@ -435,39 +462,60 @@ export default function Gemma4Assistant({ profiles = [] }) {
           )}
         </section>
 
-        <form className="flex items-end gap-[10px]" onSubmit={handleTextSubmit}>
-          <Textarea
-            className="min-h-[44px] flex-1 resize-none"
-            rows={1}
-            value={draft}
-            disabled={isBusy}
-            placeholder={t('gemma4_assistant.write')}
-            aria-label={t('gemma4_assistant.write')}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                event.currentTarget.form?.requestSubmit();
-              }
-            }}
-          />
-          <Button type="submit" disabled={!draft.trim() || isBusy}>
-            <Send size={16} /> {t('gemma4_assistant.send')}
-          </Button>
-          <SettingsToggle
-            checked={audioEnabled}
-            disabled={isBusy}
-            aria-label={t('gemma4_assistant.audio_reply')}
-            onChange={setAudioEnabled}
-          />
-          <span className="inline-flex items-center gap-[5px] text-sm text-fg-muted">
-            <Volume2 size={15} /> {t('gemma4_assistant.audio_reply')}
-          </span>
+        <form
+          className="rounded-2xl border border-white/[.09] bg-[#14100e]/95 p-3 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl"
+          onSubmit={handleTextSubmit}
+        >
+          <div className="mb-3 flex items-center justify-between px-2 text-xs font-semibold text-stone-300">
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-stone-800 px-3 py-2 text-stone-100"
+              disabled={isBusy}
+              onClick={recording.isRecording ? recording.stopRecording : recording.startRecording}
+            >
+              {recording.isRecording ? <Square size={15} /> : <Mic size={15} />}
+              {recording.isRecording ? t('gemma4_assistant.stop') : t('gemma4_assistant.talk')}
+            </button>
+            <span className="flex items-center gap-2 text-stone-400">
+              <Volume2 size={15} /> {t('gemma4_assistant.audio_reply')}
+            </span>
+          </div>
+          <div className="flex items-end gap-[10px]">
+            <Textarea
+              className="min-h-[44px] flex-1 resize-none rounded-xl border-[#4a3022]/70 bg-[#0f0c0a] text-stone-100 placeholder:text-stone-500"
+              rows={1}
+              value={draft}
+              disabled={isBusy}
+              placeholder={t('gemma4_assistant.write')}
+              aria-label={t('gemma4_assistant.write')}
+              onChange={(event) => setDraft(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault();
+                  event.currentTarget.form?.requestSubmit();
+                }
+              }}
+            />
+            <Button
+              type="submit"
+              className="rounded-xl bg-amber-600 text-white hover:bg-amber-500"
+              disabled={!draft.trim() || isBusy}
+            >
+              <Send size={16} /> {t('gemma4_assistant.send')}
+            </Button>
+            <SettingsToggle
+              checked={audioEnabled}
+              disabled={isBusy}
+              aria-label={t('gemma4_assistant.audio_reply')}
+              onChange={setAudioEnabled}
+            />
+          </div>
         </form>
 
-        <footer className="flex flex-wrap items-center justify-center gap-[12px]">
+        <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[.08] pt-3 text-[11px] text-stone-500">
           <Button
             variant={recording.isRecording ? 'danger' : 'primary'}
+            className="hidden"
             disabled={isBusy && !recording.isRecording}
             onClick={recording.isRecording ? recording.stopRecording : recording.startRecording}
           >
@@ -475,7 +523,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
             {recording.isRecording ? t('gemma4_assistant.stop') : t('gemma4_assistant.talk')}
           </Button>
           <span
-            className="inline-flex items-center gap-[6px] text-sm text-fg-muted"
+            className="ml-auto inline-flex items-center gap-[6px] text-xs text-stone-400"
             aria-live="polite"
           >
             <Volume2 size={15} /> {phaseLabel}
