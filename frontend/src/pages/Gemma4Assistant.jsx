@@ -1,5 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Bot, Brain, Download, Mic, Send, Square, Trash2, Volume2 } from 'lucide-react';
+import {
+  Bot,
+  Brain,
+  ChevronDown,
+  Copy,
+  Download,
+  GitBranch,
+  Mic,
+  Plus,
+  RotateCw,
+  Send,
+  SlidersHorizontal,
+  Sparkles,
+  Square,
+  Trash2,
+  Volume2,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 
@@ -34,6 +50,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
   const [threadsLoading, setThreadsLoading] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [downloadingAudioId, setDownloadingAudioId] = useState('');
+  const [configOpen, setConfigOpen] = useState(true);
   const initialPersona = useRef(persona);
 
   const applyThread = useCallback(
@@ -308,6 +325,9 @@ export default function Gemma4Assistant({ profiles = [] }) {
               <h1 className="m-0 text-xl font-bold tracking-tight text-stone-100 md:text-2xl">
                 {t('gemma4_assistant.title')}
               </h1>
+              <span className="rounded-md border border-amber-500/30 bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                V4.1 Neural
+              </span>
               <p className="m-0 mt-1 text-xs text-stone-400 md:text-sm">
                 {t('gemma4_assistant.subtitle')}
               </p>
@@ -317,76 +337,96 @@ export default function Gemma4Assistant({ profiles = [] }) {
             <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-400" />
             {t('gemma4_assistant.ready')}
           </div>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1 rounded-xl border border-stone-700 bg-stone-800/70 px-3 py-2 text-xs font-semibold text-stone-200 hover:bg-stone-700"
+            onClick={() => setConfigOpen((open) => !open)}
+          >
+            <SlidersHorizontal size={14} />
+            <span className="hidden sm:inline">Ajustes</span>
+            <ChevronDown size={13} className={configOpen ? '' : '-rotate-90'} />
+          </button>
         </header>
 
-        <Panel className="grid shrink-0 gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:grid-cols-2">
-          <div className="flex items-end gap-[8px] md:col-span-2">
-            <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
-              {t('gemma4_assistant.threads')}
+        {configOpen ? (
+          <Panel className="grid shrink-0 gap-4 rounded-2xl border border-white/[.09] bg-[#14100e]/90 p-5 shadow-[0_20px_40px_rgba(0,0,0,.6)] backdrop-blur-xl md:grid-cols-2">
+            <div className="flex items-end gap-[8px] md:col-span-2">
+              <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
+                <span className="flex items-center gap-1.5">
+                  <GitBranch size={13} className="text-amber-400" /> {t('gemma4_assistant.threads')}
+                </span>
+                <Select
+                  className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
+                  value={currentThreadId}
+                  disabled={threadsLoading || isBusy}
+                  onChange={async (event) => {
+                    try {
+                      await openThread(event.target.value);
+                    } catch (error) {
+                      toast.error(error?.message || t('gemma4_assistant.failed'));
+                    }
+                  }}
+                >
+                  {threads.map((thread) => (
+                    <option key={thread.id} value={thread.id}>
+                      {thread.title || t('gemma4_assistant.new_thread')}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                className="rounded-xl border border-stone-700 bg-stone-800 text-stone-200"
+                disabled={isBusy}
+                onClick={createThread}
+              >
+                {t('gemma4_assistant.new_thread')}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="rounded-xl border border-red-500/20 bg-red-500/10 text-red-400"
+                disabled={isBusy}
+                onClick={removeThread}
+              >
+                <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
+              </Button>
+            </div>
+            <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
+              <span className="flex items-center gap-1.5">
+                <Volume2 size={13} className="text-amber-400" /> {t('gemma4_assistant.voice')}
+              </span>
               <Select
                 className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
-                value={currentThreadId}
-                disabled={threadsLoading || isBusy}
-                onChange={async (event) => {
-                  try {
-                    await openThread(event.target.value);
-                  } catch (error) {
-                    toast.error(error?.message || t('gemma4_assistant.failed'));
-                  }
-                }}
+                value={profileId || profiles[0]?.id || ''}
+                onChange={(event) => setProfileId(event.target.value)}
               >
-                {threads.map((thread) => (
-                  <option key={thread.id} value={thread.id}>
-                    {thread.title || t('gemma4_assistant.new_thread')}
+                <option value="">{t('gemma4_assistant.default_voice')}</option>
+                {profiles.map((profile) => (
+                  <option key={profile.id} value={profile.id}>
+                    {profile.name || profile.id}
                   </option>
                 ))}
               </Select>
             </label>
-            <Button
-              type="button"
-              variant="ghost"
-              className="rounded-xl border border-stone-700 bg-stone-800 text-stone-200"
-              disabled={isBusy}
-              onClick={createThread}
-            >
-              {t('gemma4_assistant.new_thread')}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="rounded-xl border border-red-500/20 bg-red-500/10 text-red-400"
-              disabled={isBusy}
-              onClick={removeThread}
-            >
-              <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
-            </Button>
-          </div>
-          <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
-            {t('gemma4_assistant.voice')}
-            <Select
-              className="rounded-xl border-stone-700 bg-stone-900 text-xs text-stone-200"
-              value={profileId || profiles[0]?.id || ''}
-              onChange={(event) => setProfileId(event.target.value)}
-            >
-              <option value="">{t('gemma4_assistant.default_voice')}</option>
-              {profiles.map((profile) => (
-                <option key={profile.id} value={profile.id}>
-                  {profile.name || profile.id}
-                </option>
-              ))}
-            </Select>
-          </label>
-          <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
-            {t('gemma4_assistant.persona')}
-            <Textarea
-              rows={2}
-              value={persona}
-              onChange={(event) => setPersona(event.target.value)}
-            />
-          </label>
-        </Panel>
+            <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400 md:col-span-2">
+              <span className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-amber-400" /> {t('gemma4_assistant.persona')}
+                </span>
+                <small className="font-normal text-stone-500">Editado localmente</small>
+              </span>
+              <Textarea
+                rows={2}
+                value={persona}
+                onChange={(event) => setPersona(event.target.value)}
+              />
+            </label>
+          </Panel>
+        ) : null}
 
-        <section className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-2xl border border-white/[.09] bg-[#17120f]/90 p-4 shadow-[0_20px_40px_rgba(0,0,0,.45)] backdrop-blur-xl md:p-5">
+        <section className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-2xl border border-white/[.09] bg-[#110d0b]/70 p-4 shadow-[0_20px_40px_rgba(0,0,0,.45)] backdrop-blur-xl md:p-5">
           {turns.length === 0 ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-[8px] text-center text-fg-muted">
               <Brain size={34} className="opacity-40" />
@@ -396,67 +436,104 @@ export default function Gemma4Assistant({ profiles = [] }) {
             turns.map((turn, index) => (
               <div
                 key={turn.id || `${turn.role}-${index}`}
-                aria-busy={turn.isStreaming || undefined}
-                className={`max-w-[82%] rounded-[16px] px-[14px] py-[10px] text-sm leading-relaxed ${
-                  turn.role === 'user'
-                    ? 'ml-auto border border-[#8b5e3c] bg-[#6f472e] text-[#fdfbf7] shadow-md'
-                    : 'mr-auto border border-[#4a3022]/70 bg-[#17120f]/95 text-stone-100 shadow-md'
-                }`}
+                className={`flex items-start gap-3 ${turn.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                {turn.isStreaming ? (
-                  <span
-                    className="mb-[6px] flex items-center gap-[6px] text-xs text-fg-muted"
-                    role="status"
-                  >
-                    <Brain size={14} className="animate-pulse" />
-                    {t('gemma4_assistant.thinking')}
-                  </span>
-                ) : null}
-                {turn.role === 'assistant' && turn.text ? (
-                  <MessageResponse isAnimating={turn.isStreaming}>{turn.text}</MessageResponse>
-                ) : (
-                  turn.text
-                )}
-                {turn.audioUrl ? (
-                  <div className="mt-[10px] flex flex-wrap items-center gap-[8px]">
-                    <audio
-                      className="block h-[36px] w-full min-w-[260px]"
-                      controls
-                      preload="metadata"
-                      src={turn.audioUrl}
-                      aria-label={t('gemma4_assistant.spoken_reply')}
-                    />
-                    <label className="inline-flex items-center gap-[6px] text-xs text-fg-muted">
-                      <Download size={13} />
-                      <span className="sr-only">{t('audiobook.download')}</span>
-                      <select
-                        aria-label={t('audiobook.download')}
-                        className="rounded border border-[var(--color-border)] bg-bg-elev-2 px-[6px] py-[3px]"
-                        disabled={downloadingAudioId === turn.id}
-                        defaultValue=""
-                        onChange={(event) => {
-                          const format = event.target.value;
-                          if (format) downloadAudio(turn.id, format);
-                          event.target.value = '';
-                        }}
-                      >
-                        <option value="">{t('audiobook.download')}</option>
-                        <option value="wav">WAV</option>
-                        <option value="mp3">MP3</option>
-                        <option value="ogg">OGG</option>
-                      </select>
-                    </label>
+                {turn.role === 'assistant' ? (
+                  <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-stone-700 bg-stone-800 text-amber-400">
+                    <Bot size={15} />
                   </div>
                 ) : null}
-                <button
-                  type="button"
-                  className="ml-auto mt-[5px] block text-xs text-fg-muted opacity-70 hover:opacity-100"
-                  aria-label={t('gemma4_assistant.delete_message')}
-                  disabled={isBusy}
-                  onClick={() => removeMessage(turn.id)}
+                <div
+                  aria-busy={turn.isStreaming || undefined}
+                  className={`max-w-[86%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                    turn.role === 'user'
+                      ? 'border border-[#8b5e3c] bg-[#6f472e] text-[#fdfbf7] shadow-md'
+                      : 'border border-[#4a3022]/70 bg-[#17120f]/95 text-stone-100 shadow-md'
+                  }`}
                 >
-                  <Trash2 size={13} />
-                </button>
+                  {turn.isStreaming ? (
+                    <span
+                      className="mb-[6px] flex items-center gap-[6px] text-xs text-fg-muted"
+                      role="status"
+                    >
+                      <Brain size={14} className="animate-pulse" />
+                      {t('gemma4_assistant.thinking')}
+                    </span>
+                  ) : null}
+                  {turn.role === 'assistant' && turn.text ? (
+                    <MessageResponse isAnimating={turn.isStreaming}>{turn.text}</MessageResponse>
+                  ) : (
+                    turn.text
+                  )}
+                  {turn.audioUrl ? (
+                    <div className="mt-[10px] flex flex-wrap items-center gap-[8px]">
+                      <audio
+                        className="block h-[36px] w-full min-w-[260px]"
+                        controls
+                        preload="metadata"
+                        src={turn.audioUrl}
+                        aria-label={t('gemma4_assistant.spoken_reply')}
+                      />
+                      <label className="inline-flex items-center gap-[6px] text-xs text-fg-muted">
+                        <Download size={13} />
+                        <span className="sr-only">{t('audiobook.download')}</span>
+                        <select
+                          aria-label={t('audiobook.download')}
+                          className="rounded border border-[var(--color-border)] bg-bg-elev-2 px-[6px] py-[3px]"
+                          disabled={downloadingAudioId === turn.id}
+                          defaultValue=""
+                          onChange={(event) => {
+                            const format = event.target.value;
+                            if (format) downloadAudio(turn.id, format);
+                            event.target.value = '';
+                          }}
+                        >
+                          <option value="">{t('audiobook.download')}</option>
+                          <option value="wav">WAV</option>
+                          <option value="mp3">MP3</option>
+                          <option value="ogg">OGG</option>
+                        </select>
+                      </label>
+                    </div>
+                  ) : null}
+                  {turn.role === 'assistant' && !turn.isStreaming ? (
+                    <div className="mt-3 flex items-center justify-between border-t border-stone-800 pt-2 text-xs text-stone-500">
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-1 hover:text-stone-200"
+                          onClick={() => navigator.clipboard?.writeText(turn.text)}
+                        >
+                          <Copy size={13} /> Copiar
+                        </button>
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-1 hover:text-stone-200"
+                        >
+                          <RotateCw size={13} /> Reintentar
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        aria-label={t('gemma4_assistant.delete_message')}
+                        disabled={isBusy}
+                        onClick={() => removeMessage(turn.id)}
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="ml-auto mt-1 block text-xs text-stone-400 opacity-70 hover:opacity-100"
+                      aria-label={t('gemma4_assistant.delete_message')}
+                      disabled={isBusy}
+                      onClick={() => removeMessage(turn.id)}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  )}
+                </div>
               </div>
             ))
           )}
