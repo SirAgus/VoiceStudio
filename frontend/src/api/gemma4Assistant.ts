@@ -1,20 +1,54 @@
-import { apiFetch, apiJson } from './client';
+import { apiFetch, apiJson, apiUrl } from './client';
 
 export interface AssistantTurn {
   transcript: string;
   reply: string;
   model: string;
+  user_message_id?: string;
+  assistant_message_id?: string;
+}
+
+export interface AssistantMessage {
+  id: string;
+  thread_id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  status: 'streaming' | 'complete' | 'error';
+  audio_requested: boolean;
+  audio_url?: string | null;
+}
+
+export interface AssistantThread {
+  id: string;
+  title: string;
+  persona: string;
+  created_at: number;
+  updated_at: number;
+  message_count?: number;
+  messages?: AssistantMessage[];
+}
+
+export interface TurnPersistence {
+  threadId: string;
+  audioRequested: boolean;
+  userMessageId?: string;
+  assistantMessageId?: string;
 }
 
 export async function runGemma4Turn(
   audio: File,
   persona: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
+  persistence?: TurnPersistence,
 ): Promise<AssistantTurn> {
   const body = new FormData();
   body.append('audio', audio, audio.name || 'turn.wav');
   body.append('persona', persona);
   body.append('history_json', JSON.stringify(history));
+  if (persistence) {
+    body.append('thread_id', persistence.threadId);
+    body.append('audio_requested', String(persistence.audioRequested));
+  }
   return apiJson<AssistantTurn>('/gemma4-assistant/turn', { method: 'POST', body });
 }
 
@@ -40,11 +74,20 @@ export async function streamGemma4TextTurn(
   persona: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
   onDelta: (fragment: string) => void,
+  persistence?: TurnPersistence,
 ): Promise<AssistantTurn> {
   const response = await apiFetch('/gemma4-assistant/text-turn/stream', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, persona, history }),
+    body: JSON.stringify({
+      text,
+      persona,
+      history,
+      thread_id: persistence?.threadId,
+      user_message_id: persistence?.userMessageId,
+      assistant_message_id: persistence?.assistantMessageId,
+      audio_requested: persistence?.audioRequested ?? false,
+    }),
   });
   if (!response.body) throw new Error('The streaming response has no body.');
 
@@ -74,10 +117,61 @@ export async function streamGemma4TextTurn(
   return completed;
 }
 
-export async function synthesizeAssistantReply(text: string, profileId?: string): Promise<Blob> {
+export async function synthesizeAssistantReply(
+  text: string,
+  profileId?: string,
+): Promise<{ blob: Blob; audioId: string }> {
   const body = new FormData();
   body.append('text', text);
   if (profileId) body.append('profile_id', profileId);
   const response = await apiFetch('/generate', { method: 'POST', body });
-  return response.blob();
+  const audioId = response.headers.get('X-Audio-Id');
+  if (!audioId) throw new Error('The generated audio has no persistent identifier.');
+  return { blob: await response.blob(), audioId };
+}
+
+export async function listGemma4Threads(): Promise<AssistantThread[]> {
+  return apiJson<AssistantThread[]>('/gemma4-assistant/threads');
+}
+
+export async function createGemma4Thread(persona: string): Promise<AssistantThread> {
+  return apiJson<AssistantThread>('/gemma4-assistant/threads', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ persona }),
+  });
+}
+
+export async function getGemma4Thread(threadId: string): Promise<AssistantThread> {
+  return apiJson<AssistantThread>(`/gemma4-assistant/threads/${threadId}`);
+}
+
+export async function deleteGemma4Thread(threadId: string): Promise<void> {
+  await apiFetch(`/gemma4-assistant/threads/${threadId}`, { method: 'DELETE' });
+}
+
+export async function deleteGemma4Message(threadId: string, messageId: string): Promise<void> {
+  await apiFetch(`/gemma4-assistant/threads/${threadId}/messages/${messageId}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function attachGemma4MessageAudio(
+  threadId: string,
+  messageId: string,
+  audioId: string,
+  profileId?: string,
+): Promise<AssistantMessage> {
+  return apiJson<AssistantMessage>(
+    `/gemma4-assistant/threads/${threadId}/messages/${messageId}/audio`,
+    {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audio_id: audioId, profile_id: profileId || '' }),
+    },
+  );
+}
+
+export function gemma4MessageAudioUrl(path?: string | null): string | undefined {
+  return path ? apiUrl(path) : undefined;
 }

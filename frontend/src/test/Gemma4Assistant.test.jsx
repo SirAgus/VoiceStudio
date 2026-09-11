@@ -8,11 +8,29 @@ import i18n from '../i18n';
 const streamGemma4TextTurn = vi.fn();
 const synthesizeAssistantReply = vi.fn();
 const playBlobAudio = vi.fn();
+const thread = {
+  id: 'thread-1',
+  title: '',
+  persona: '',
+  created_at: 0,
+  updated_at: 0,
+  messages: [],
+};
 
 vi.mock('../api/gemma4Assistant', () => ({
   runGemma4Turn: vi.fn(),
   streamGemma4TextTurn: (...args) => streamGemma4TextTurn(...args),
   synthesizeAssistantReply: (...args) => synthesizeAssistantReply(...args),
+  listGemma4Threads: vi.fn(async () => [thread]),
+  createGemma4Thread: vi.fn(async () => thread),
+  getGemma4Thread: vi.fn(async () => thread),
+  deleteGemma4Thread: vi.fn(),
+  deleteGemma4Message: vi.fn(),
+  attachGemma4MessageAudio: vi.fn(async (_threadId, messageId) => ({
+    id: messageId,
+    audio_url: '/gemma4-assistant/threads/thread-1/messages/audio/audio.wav',
+  })),
+  gemma4MessageAudioUrl: (path) => path,
 }));
 vi.mock('../hooks/useRecording', () => ({
   default: () => ({
@@ -33,7 +51,10 @@ describe('Gemma4Assistant typed conversation', () => {
     streamGemma4TextTurn.mockReset();
     synthesizeAssistantReply.mockReset();
     playBlobAudio.mockReset();
-    synthesizeAssistantReply.mockResolvedValue(new Blob(['wav'], { type: 'audio/wav' }));
+    synthesizeAssistantReply.mockResolvedValue({
+      blob: new Blob(['wav'], { type: 'audio/wav' }),
+      audioId: 'audio-1',
+    });
     playBlobAudio.mockResolvedValue(undefined);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:assistant-reply');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
@@ -55,25 +76,36 @@ describe('Gemma4Assistant typed conversation', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.change(screen.getByLabelText(i18n.t('gemma4_assistant.write')), {
+    const input = screen.getByLabelText(i18n.t('gemma4_assistant.write'));
+    await waitFor(() => expect(input).not.toBeDisabled());
+    fireEvent.change(input, {
       target: { value: 'Hola' },
     });
     fireEvent.click(screen.getByRole('button', { name: i18n.t('gemma4_assistant.send') }));
 
     expect(screen.getByText('Hola')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveTextContent(i18n.t('gemma4_assistant.thinking'));
+    await waitFor(() => expect(streamGemma4TextTurn).toHaveBeenCalled());
     await act(async () => emitFragment('¿Cómo '));
     expect(screen.getByText('¿Cómo')).toBeInTheDocument();
     await act(async () => {
       emitFragment('estás?');
-      finishStream({ transcript: 'Hola', reply: '¿Cómo estás?', model: 'local-model' });
+      finishStream({
+        transcript: 'Hola',
+        reply: '¿Cómo estás?',
+        model: 'local-model',
+        assistant_message_id: 'assistant-1',
+        user_message_id: 'user-1',
+      });
     });
     expect(await screen.findByText('¿Cómo estás?')).toBeInTheDocument();
     await waitFor(() =>
       expect(synthesizeAssistantReply).toHaveBeenCalledWith('¿Cómo estás?', 'voice-1'),
     );
     await waitFor(() =>
-      expect(container.querySelector('audio')).toHaveAttribute('src', 'blob:assistant-reply'),
+      expect(container.querySelector('audio')).toHaveAttribute(
+        'src',
+        '/gemma4-assistant/threads/thread-1/messages/audio/audio.wav',
+      ),
     );
   });
 });

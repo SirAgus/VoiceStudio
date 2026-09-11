@@ -2731,7 +2731,7 @@
     "title": "ผู้ช่วยเสียง Gemma 4", "subtitle": "Gemma ฟังและคิดบนเครื่อง ส่วน VoiceStudio จะพูดคำตอบ",
     "voice": "เสียงพูด", "default_voice": "เสียง TTS เริ่มต้น", "persona": "บุคลิกผู้ช่วย", "default_persona": "คุณคือผู้ช่วยเสียงที่กระชับและเป็นประโยชน์ ตอบเป็นภาษาที่ผู้ใช้พูด",
     "spoken_reply": "คำตอบจาก Gemma 4", "failed": "การสนทนาด้วยเสียงล้มเหลว", "listening": "กำลังฟัง…",
-    "thinking": "กำลังคิด…", "speaking": "กำลังพูด…", "ready": "พร้อม", "empty": "กด สนทนา แล้วพูด จากนั้นกด หยุด",
+    "thinking": "กำลังคิด…", "speaking": "กำลังพูด…", "ready": "พร้อม", "empty": "กด สนทนา แล้วพูด จากนั้นกด หยุด", "threads": "เธรด", "new_thread": "เธรดใหม่", "delete_thread": "ลบเธรด", "delete_message": "ลบข้อความ", "audio_reply": "คำตอบเสียง",
     "clear": "ล้าง", "stop": "หยุด", "talk": "สนทนา", "write": "พิมพ์ข้อความ…", "send": "ส่ง"
   },
   "convert": {

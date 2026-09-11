@@ -2738,7 +2738,7 @@
     "title": "Gemma 4 语音助手", "subtitle": "Gemma 在本地聆听和思考，VoiceStudio 朗读回答。",
     "voice": "朗读声音", "default_voice": "默认 TTS 声音", "persona": "助手角色", "default_persona": "你是一名简洁、乐于助人的语音助手。请使用用户所用的语言回答。",
     "spoken_reply": "Gemma 4 回答", "failed": "语音对话失败。", "listening": "正在聆听…",
-    "thinking": "正在思考…", "speaking": "正在说话…", "ready": "准备就绪", "empty": "按“对话”开始说话，说完后按“停止”。",
+    "thinking": "正在思考…", "speaking": "正在说话…", "ready": "准备就绪", "empty": "按“对话”开始说话，说完后按“停止”。", "threads": "线程", "new_thread": "新建线程", "delete_thread": "删除线程", "delete_message": "删除消息", "audio_reply": "音频回复",
     "clear": "清空", "stop": "停止", "talk": "对话", "write": "输入消息…", "send": "发送"
   },
   "convert": {

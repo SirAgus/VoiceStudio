@@ -4,11 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 
 import {
+  attachGemma4MessageAudio,
+  createGemma4Thread,
+  deleteGemma4Message,
+  deleteGemma4Thread,
+  gemma4MessageAudioUrl,
+  getGemma4Thread,
+  listGemma4Threads,
   streamGemma4TextTurn,
   runGemma4Turn,
   synthesizeAssistantReply,
 } from '../api/gemma4Assistant';
 import { MessageResponse } from '../components/ai-elements/message';
+import { SettingsToggle } from '../components/settings/primitives';
 import useRecording from '../hooks/useRecording';
 import { playBlobAudio } from '../utils/media';
 import { Button, Panel, Select, Textarea } from '../ui';
@@ -20,19 +28,55 @@ export default function Gemma4Assistant({ profiles = [] }) {
   const [profileId, setProfileId] = useState(profiles[0]?.id || '');
   const [phase, setPhase] = useState('idle');
   const [draft, setDraft] = useState('');
-  const audioUrls = useRef(new Set());
+  const [threads, setThreads] = useState([]);
+  const [currentThreadId, setCurrentThreadId] = useState('');
+  const [threadsLoading, setThreadsLoading] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const initialPersona = useRef(persona);
 
-  useEffect(
-    () => () => {
-      for (const url of audioUrls.current) URL.revokeObjectURL(url);
-      audioUrls.current.clear();
+  const applyThread = useCallback(
+    (thread) => {
+      setCurrentThreadId(thread.id);
+      if (thread.persona) setPersona(thread.persona);
+      setTurns(
+        (thread.messages || []).map((message) => ({
+          id: message.id,
+          role: message.role,
+          text: message.status === 'error' ? t('gemma4_assistant.failed') : message.content,
+          error: message.status === 'error',
+          isStreaming: false,
+          audioUrl: gemma4MessageAudioUrl(message.audio_url),
+        })),
+      );
     },
-    [],
+    [t],
+  );
+
+  const openThread = useCallback(
+    async (threadId) => applyThread(await getGemma4Thread(threadId)),
+    [applyThread],
   );
 
   useEffect(() => {
-    if (!profileId && profiles[0]?.id) setProfileId(profiles[0].id);
-  }, [profileId, profiles]);
+    let active = true;
+    (async () => {
+      try {
+        let items = await listGemma4Threads();
+        if (!items.length) items = [await createGemma4Thread(initialPersona.current)];
+        const thread = await getGemma4Thread(items[0].id);
+        if (!active) return;
+        setThreads(items);
+        applyThread(thread);
+      } catch (error) {
+        if (active) toast.error(error?.message || t('gemma4_assistant.failed'));
+      } finally {
+        if (active) setThreadsLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [applyThread, t]);
 
   const history = useMemo(
     () =>
@@ -43,41 +87,55 @@ export default function Gemma4Assistant({ profiles = [] }) {
   );
 
   const speakReply = useCallback(
-    async (replyId, reply) => {
+    async (threadId, replyId, reply, shouldCreateAudio) => {
+      if (!shouldCreateAudio) return;
       setPhase('speaking');
       try {
-        const speech = await synthesizeAssistantReply(reply, profileId || undefined);
-        const audioUrl = URL.createObjectURL(speech);
-        audioUrls.current.add(audioUrl);
-        setTurns((current) =>
-          current.map((turn) => (turn.id === replyId ? { ...turn, audioUrl } : turn)),
+        const speech = await synthesizeAssistantReply(reply, profileId || profiles[0]?.id);
+        const message = await attachGemma4MessageAudio(
+          threadId,
+          replyId,
+          speech.audioId,
+          profileId || profiles[0]?.id,
         );
-        await playBlobAudio(speech, { label: t('gemma4_assistant.spoken_reply') });
+        setTurns((current) =>
+          current.map((turn) =>
+            turn.id === replyId
+              ? { ...turn, audioUrl: gemma4MessageAudioUrl(message.audio_url) }
+              : turn,
+          ),
+        );
+        await playBlobAudio(speech.blob, { label: t('gemma4_assistant.spoken_reply') });
       } catch (error) {
         toast.error(error?.message || t('gemma4_assistant.failed'));
       }
     },
-    [profileId, t],
+    [profileId, profiles, t],
   );
 
   const presentReply = useCallback(
     async (result) => {
-      const replyId = crypto.randomUUID();
+      const replyId = result.assistant_message_id || crypto.randomUUID();
+      const userMessageId = result.user_message_id || crypto.randomUUID();
       setTurns((current) => [
         ...current,
-        { id: crypto.randomUUID(), role: 'user', text: result.transcript },
+        { id: userMessageId, role: 'user', text: result.transcript },
         { id: replyId, role: 'assistant', text: result.reply },
       ]);
-      await speakReply(replyId, result.reply);
+      await speakReply(currentThreadId, replyId, result.reply, audioEnabled);
     },
-    [speakReply],
+    [audioEnabled, currentThreadId, speakReply],
   );
 
   const handleAudio = useCallback(
     async (audio) => {
+      if (!currentThreadId) return;
       setPhase('thinking');
       try {
-        const result = await runGemma4Turn(audio, persona, history);
+        const result = await runGemma4Turn(audio, persona, history, {
+          threadId: currentThreadId,
+          audioRequested: audioEnabled,
+        });
         await presentReply(result);
       } catch (error) {
         toast.error(error?.message || t('gemma4_assistant.failed'));
@@ -85,36 +143,62 @@ export default function Gemma4Assistant({ profiles = [] }) {
         setPhase('idle');
       }
     },
-    [history, persona, presentReply, t],
+    [audioEnabled, currentThreadId, history, persona, presentReply, t],
   );
+
+  const recording = useRecording(handleAudio);
+  const isBusy = phase !== 'idle' || recording.isCleaning || threadsLoading;
 
   const handleTextSubmit = useCallback(
     async (event) => {
       event.preventDefault();
       const text = draft.trim();
-      if (!text || phase !== 'idle') return;
+      if (!text || phase !== 'idle' || !currentThreadId) return;
+      const userMessageId = crypto.randomUUID();
       const replyId = crypto.randomUUID();
       setDraft('');
       setPhase('thinking');
       setTurns((current) => [
         ...current,
-        { id: crypto.randomUUID(), role: 'user', text },
+        { id: userMessageId, role: 'user', text },
         { id: replyId, role: 'assistant', text: '', isStreaming: true },
       ]);
       try {
-        const result = await streamGemma4TextTurn(text, persona, history, (fragment) => {
-          setTurns((current) =>
-            current.map((turn) =>
-              turn.id === replyId ? { ...turn, text: `${turn.text}${fragment}` } : turn,
-            ),
-          );
-        });
+        const result = await streamGemma4TextTurn(
+          text,
+          persona,
+          history,
+          (fragment) => {
+            setTurns((current) =>
+              current.map((turn) =>
+                turn.id === replyId ? { ...turn, text: `${turn.text}${fragment}` } : turn,
+              ),
+            );
+          },
+          {
+            threadId: currentThreadId,
+            audioRequested: audioEnabled,
+            userMessageId,
+            assistantMessageId: replyId,
+          },
+        );
         setTurns((current) =>
           current.map((turn) =>
             turn.id === replyId ? { ...turn, text: result.reply, isStreaming: false } : turn,
           ),
         );
-        await speakReply(replyId, result.reply);
+        setThreads((current) =>
+          current.map((thread) =>
+            thread.id === currentThreadId
+              ? {
+                  ...thread,
+                  title: thread.title || text.slice(0, 60),
+                  updated_at: Date.now() / 1000,
+                }
+              : thread,
+          ),
+        );
+        await speakReply(currentThreadId, replyId, result.reply, audioEnabled);
       } catch (error) {
         setTurns((current) =>
           current.map((turn) =>
@@ -128,17 +212,52 @@ export default function Gemma4Assistant({ profiles = [] }) {
         setPhase('idle');
       }
     },
-    [draft, history, persona, phase, speakReply, t],
+    [audioEnabled, currentThreadId, draft, history, persona, phase, speakReply, t],
   );
 
-  const clearTurns = useCallback(() => {
-    for (const url of audioUrls.current) URL.revokeObjectURL(url);
-    audioUrls.current.clear();
-    setTurns([]);
-  }, []);
+  const createThread = useCallback(async () => {
+    if (isBusy) return;
+    try {
+      const thread = await createGemma4Thread(persona);
+      setThreads((current) => [thread, ...current]);
+      applyThread({ ...thread, messages: [] });
+    } catch (error) {
+      toast.error(error?.message || t('gemma4_assistant.failed'));
+    }
+  }, [applyThread, isBusy, persona, t]);
 
-  const recording = useRecording(handleAudio);
-  const isBusy = phase !== 'idle' || recording.isCleaning;
+  const removeThread = useCallback(async () => {
+    if (!currentThreadId || isBusy || !window.confirm(t('gemma4_assistant.delete_thread'))) return;
+    try {
+      await deleteGemma4Thread(currentThreadId);
+      const remaining = threads.filter((thread) => thread.id !== currentThreadId);
+      if (remaining.length) {
+        setThreads(remaining);
+        await openThread(remaining[0].id);
+      } else {
+        const replacement = await createGemma4Thread(persona);
+        setThreads([replacement]);
+        applyThread({ ...replacement, messages: [] });
+      }
+    } catch (error) {
+      toast.error(error?.message || t('gemma4_assistant.failed'));
+    }
+  }, [applyThread, currentThreadId, isBusy, openThread, persona, t, threads]);
+
+  const removeMessage = useCallback(
+    async (messageId) => {
+      if (!currentThreadId || isBusy || !window.confirm(t('gemma4_assistant.delete_message')))
+        return;
+      try {
+        await deleteGemma4Message(currentThreadId, messageId);
+        setTurns((current) => current.filter((turn) => turn.id !== messageId));
+      } catch (error) {
+        toast.error(error?.message || t('gemma4_assistant.failed'));
+      }
+    },
+    [currentThreadId, isBusy, t],
+  );
+
   const phaseLabel = recording.isRecording
     ? t('gemma4_assistant.listening')
     : phase === 'thinking'
@@ -165,9 +284,40 @@ export default function Gemma4Assistant({ profiles = [] }) {
         </header>
 
         <Panel className="grid gap-[14px] p-[18px] md:grid-cols-2">
+          <div className="flex items-end gap-[8px] md:col-span-2">
+            <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-sm text-fg-muted">
+              {t('gemma4_assistant.threads')}
+              <Select
+                value={currentThreadId}
+                disabled={threadsLoading || isBusy}
+                onChange={async (event) => {
+                  try {
+                    await openThread(event.target.value);
+                  } catch (error) {
+                    toast.error(error?.message || t('gemma4_assistant.failed'));
+                  }
+                }}
+              >
+                {threads.map((thread) => (
+                  <option key={thread.id} value={thread.id}>
+                    {thread.title || t('gemma4_assistant.new_thread')}
+                  </option>
+                ))}
+              </Select>
+            </label>
+            <Button type="button" variant="ghost" disabled={isBusy} onClick={createThread}>
+              {t('gemma4_assistant.new_thread')}
+            </Button>
+            <Button type="button" variant="ghost" disabled={isBusy} onClick={removeThread}>
+              <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
+            </Button>
+          </div>
           <label className="flex flex-col gap-[6px] text-sm text-fg-muted">
             {t('gemma4_assistant.voice')}
-            <Select value={profileId} onChange={(event) => setProfileId(event.target.value)}>
+              <Select
+                value={profileId || profiles[0]?.id || ''}
+                onChange={(event) => setProfileId(event.target.value)}
+              >
               <option value="">{t('gemma4_assistant.default_voice')}</option>
               {profiles.map((profile) => (
                 <option key={profile.id} value={profile.id}>
@@ -226,6 +376,15 @@ export default function Gemma4Assistant({ profiles = [] }) {
                     aria-label={t('gemma4_assistant.spoken_reply')}
                   />
                 ) : null}
+                <button
+                  type="button"
+                  className="ml-auto mt-[5px] block text-xs text-fg-muted opacity-70 hover:opacity-100"
+                  aria-label={t('gemma4_assistant.delete_message')}
+                  disabled={isBusy}
+                  onClick={() => removeMessage(turn.id)}
+                >
+                  <Trash2 size={13} />
+                </button>
               </div>
             ))
           )}
@@ -250,12 +409,18 @@ export default function Gemma4Assistant({ profiles = [] }) {
           <Button type="submit" disabled={!draft.trim() || isBusy}>
             <Send size={16} /> {t('gemma4_assistant.send')}
           </Button>
+          <SettingsToggle
+            checked={audioEnabled}
+            disabled={isBusy}
+            aria-label={t('gemma4_assistant.audio_reply')}
+            onChange={setAudioEnabled}
+          />
+          <span className="inline-flex items-center gap-[5px] text-sm text-fg-muted">
+            <Volume2 size={15} /> {t('gemma4_assistant.audio_reply')}
+          </span>
         </form>
 
         <footer className="flex flex-wrap items-center justify-center gap-[12px]">
-          <Button variant="ghost" disabled={!turns.length || isBusy} onClick={clearTurns}>
-            <Trash2 size={15} /> {t('gemma4_assistant.clear')}
-          </Button>
           <Button
             variant={recording.isRecording ? 'danger' : 'primary'}
             disabled={isBusy && !recording.isRecording}

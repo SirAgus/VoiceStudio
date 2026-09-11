@@ -2731,7 +2731,7 @@
     "title": "Gemma 4-spraakassistent", "subtitle": "Gemma luistert en denkt lokaal; VoiceStudio spreekt het antwoord uit.",
     "voice": "Spreekstem", "default_voice": "Standaard TTS-stem", "persona": "Assistentpersona", "default_persona": "Je bent een beknopte, behulpzame spraakassistent. Antwoord in de taal van de gebruiker.",
     "spoken_reply": "Antwoord van Gemma 4", "failed": "De spraakbeurt is mislukt.", "listening": "Luisteren…",
-    "thinking": "Nadenken…", "speaking": "Spreken…", "ready": "Gereed", "empty": "Druk op Praten, spreek en druk daarna op Stoppen.",
+    "thinking": "Nadenken…", "speaking": "Spreken…", "ready": "Gereed", "empty": "Druk op Praten, spreek en druk daarna op Stoppen.", "threads": "Gesprekken", "new_thread": "Nieuwe thread", "delete_thread": "Thread verwijderen", "delete_message": "Bericht verwijderen", "audio_reply": "Audioreactie",
     "clear": "Wissen", "stop": "Stoppen", "talk": "Praten", "write": "Typ een bericht…", "send": "Versturen"
   },
   "convert": {

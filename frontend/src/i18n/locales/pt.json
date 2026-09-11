@@ -2731,7 +2731,7 @@
     "title": "Assistente de voz Gemma 4", "subtitle": "Gemma ouve e pensa localmente; o VoiceStudio fala a resposta.",
     "voice": "Voz de fala", "default_voice": "Voz TTS padrão", "persona": "Personalidade do assistente", "default_persona": "Você é um assistente de voz conciso e útil. Responda no idioma do usuário.",
     "spoken_reply": "Resposta do Gemma 4", "failed": "O turno de voz falhou.", "listening": "Ouvindo…",
-    "thinking": "Pensando…", "speaking": "Falando…", "ready": "Pronto", "empty": "Pressione Falar, fale e depois pressione Parar.",
+    "thinking": "Pensando…", "speaking": "Falando…", "ready": "Pronto", "empty": "Pressione Falar, fale e depois pressione Parar.", "threads": "Fios", "new_thread": "Novo fio", "delete_thread": "Excluir fio", "delete_message": "Excluir mensagem", "audio_reply": "Resposta em áudio",
     "clear": "Limpar", "stop": "Parar", "talk": "Falar", "write": "Digite uma mensagem…", "send": "Enviar"
   },
   "convert": {

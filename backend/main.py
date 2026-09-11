@@ -1694,7 +1694,7 @@ app.add_middleware(
     # The marker must be readable cross-origin too — a browser UI served from
     # another origin is exactly the deployment that needs to tell "the backend
     # answered 404" from "something else answered 404" (#1385).
-    expose_headers=["Content-Disposition", BACKEND_MARKER_HEADER],
+    expose_headers=["Content-Disposition", "X-Audio-Id", "X-Audio-Path", BACKEND_MARKER_HEADER],
 )
 
 # Registered LAST, which in Starlette means OUTERMOST — so the marker lands on

@@ -15,6 +15,12 @@ paused or replayed. The sent message appears immediately; a thinking bubble then
 renders Gemma's visible response fragments as they arrive. TTS starts after the
 text completes.
 
+Conversations are stored as named SQLite threads. Use **New thread** to start
+one, switch between saved threads, or delete a thread/message; deleting also
+removes any audio owned by that message. The **Audio reply** switch controls
+whether a turn is synthesized and saved as audio, so text-only turns never
+create a TTS file.
+
 ## Setup
 
 Install the official `llama-server` runtime first. On Windows:

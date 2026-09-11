@@ -131,6 +131,38 @@ def test_text_turn_streams_visible_fragments_and_completion(monkeypatch):
     }
 
 
+def test_threaded_stream_persists_and_deletes_messages(monkeypatch):
+    from core.db import init_db
+
+    init_db()
+    client, _ = _client(monkeypatch)
+    thread = client.post(
+        "/gemma4-assistant/threads", json={"persona": "Responde breve."}
+    ).json()
+    with client.stream(
+        "POST",
+        "/gemma4-assistant/text-turn/stream",
+        json={
+            "text": "Guarda esto",
+            "thread_id": thread["id"],
+            "audio_requested": False,
+        },
+    ) as response:
+        events = [json.loads(line) for line in response.iter_lines()]
+
+    done = events[-1]
+    assert done["type"] == "done"
+    stored = client.get(f"/gemma4-assistant/threads/{thread['id']}").json()
+    assert [message["role"] for message in stored["messages"]] == ["user", "assistant"]
+    assert stored["messages"][1]["audio_requested"] is False
+    assert client.delete(
+        f"/gemma4-assistant/threads/{thread['id']}/messages/{done['assistant_message_id']}"
+    ).status_code == 200
+    assert len(client.get(f"/gemma4-assistant/threads/{thread['id']}").json()["messages"]) == 1
+    assert client.delete(f"/gemma4-assistant/threads/{thread['id']}").json() == {"deleted": True}
+    assert client.get(f"/gemma4-assistant/threads/{thread['id']}").status_code == 404
+
+
 def test_gemma4_backend_refuses_remote_audio_destination(monkeypatch):
     monkeypatch.setenv("GEMMA4_BASE_URL", "https://remote.example/v1")
     with pytest.raises(RuntimeError, match="loopback"):

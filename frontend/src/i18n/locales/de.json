@@ -2731,7 +2731,7 @@
     "title": "Gemma-4-Sprachassistent", "subtitle": "Gemma hört und denkt lokal; VoiceStudio spricht die Antwort.",
     "voice": "Sprechstimme", "default_voice": "Standard-TTS-Stimme", "persona": "Assistentenrolle", "default_persona": "Du bist ein knapper, hilfreicher Sprachassistent. Antworte in der Sprache des Benutzers.",
     "spoken_reply": "Gemma-4-Antwort", "failed": "Der Sprachdialog ist fehlgeschlagen.", "listening": "Hört zu…",
-    "thinking": "Denkt nach…", "speaking": "Spricht…", "ready": "Bereit", "empty": "Sprechen drücken, sprechen und dann Stopp drücken.",
+    "thinking": "Denkt nach…", "speaking": "Spricht…", "ready": "Bereit", "empty": "Sprechen drücken, sprechen und dann Stopp drücken.", "threads": "Threads", "new_thread": "Neuer Thread", "delete_thread": "Thread löschen", "delete_message": "Nachricht löschen", "audio_reply": "Audioantwort",
     "clear": "Leeren", "stop": "Stopp", "talk": "Sprechen", "write": "Nachricht schreiben…", "send": "Senden"
   },
   "convert": {

@@ -2731,7 +2731,7 @@
     "title": "Gemma 4 sesli asistan", "subtitle": "Gemma yerel olarak dinler ve düşünür; VoiceStudio yanıtı seslendirir.",
     "voice": "Konuşma sesi", "default_voice": "Varsayılan TTS sesi", "persona": "Asistan kişiliği", "default_persona": "Kısa ve yararlı bir sesli asistansın. Kullanıcının dilinde yanıt ver.",
     "spoken_reply": "Gemma 4 yanıtı", "failed": "Sesli konuşma başarısız oldu.", "listening": "Dinliyor…",
-    "thinking": "Düşünüyor…", "speaking": "Konuşuyor…", "ready": "Hazır", "empty": "Konuş'a basın, konuşun ve ardından Durdur'a basın.",
+    "thinking": "Düşünüyor…", "speaking": "Konuşuyor…", "ready": "Hazır", "empty": "Konuş'a basın, konuşun ve ardından Durdur'a basın.", "threads": "Konular", "new_thread": "Yeni konu", "delete_thread": "Konuyu sil", "delete_message": "Mesajı sil", "audio_reply": "Sesli yanıt",
     "clear": "Temizle", "stop": "Durdur", "talk": "Konuş", "write": "Bir mesaj yazın…", "send": "Gönder"
   },
   "convert": {

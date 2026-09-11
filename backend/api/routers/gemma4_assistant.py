@@ -7,9 +7,10 @@ import logging
 from collections.abc import Iterator
 from typing import Annotated, Any
 from urllib.parse import urlsplit
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from api.dependencies import require_local
@@ -33,6 +34,19 @@ class TextTurnRequest(BaseModel):
     text: str = Field(min_length=1, max_length=8000)
     persona: str = DEFAULT_PERSONA
     history: list[dict[str, str]] = Field(default_factory=list)
+    thread_id: UUID | None = None
+    user_message_id: UUID | None = None
+    assistant_message_id: UUID | None = None
+    audio_requested: bool = True
+
+
+class CreateThreadRequest(BaseModel):
+    persona: str = DEFAULT_PERSONA
+
+
+class AttachAudioRequest(BaseModel):
+    audio_id: str = Field(min_length=1, max_length=64)
+    profile_id: str = Field(default="", max_length=200)
 
 
 def _backend():
@@ -139,6 +153,108 @@ def _unavailable(exc: Exception) -> HTTPException:
     )
 
 
+def _message_payload(message: dict[str, Any]) -> dict[str, Any]:
+    result = dict(message)
+    result["audio_requested"] = bool(result.get("audio_requested"))
+    result["audio_url"] = (
+        f"/gemma4-assistant/threads/{result['thread_id']}/messages/{result['id']}/audio"
+        if result.get("audio_path")
+        else None
+    )
+    result.pop("audio_path", None)
+    return result
+
+
+@router.get("/threads", dependencies=[Depends(require_local)])
+def threads() -> list[dict[str, Any]]:
+    from services import gemma4_conversations
+
+    return gemma4_conversations.list_threads()
+
+
+@router.post("/threads", dependencies=[Depends(require_local)])
+def create_thread(request: CreateThreadRequest) -> dict[str, Any]:
+    from services import gemma4_conversations
+
+    return gemma4_conversations.create_thread((request.persona.strip() or DEFAULT_PERSONA)[:8000])
+
+
+@router.get("/threads/{thread_id}", dependencies=[Depends(require_local)])
+def get_thread(thread_id: UUID) -> dict[str, Any]:
+    from services import gemma4_conversations
+
+    thread = gemma4_conversations.get_thread(str(thread_id))
+    if thread is None:
+        raise HTTPException(status_code=404, detail="Conversation thread not found")
+    thread["messages"] = [_message_payload(message) for message in thread["messages"]]
+    return thread
+
+
+@router.delete("/threads/{thread_id}", dependencies=[Depends(require_local)])
+def delete_thread(thread_id: UUID) -> dict[str, bool]:
+    from core.file_cleanup import FileCleanupError
+    from services import gemma4_conversations
+
+    try:
+        deleted = gemma4_conversations.delete_thread(str(thread_id))
+    except FileCleanupError as exc:
+        raise HTTPException(status_code=500, detail="Could not delete conversation audio") from exc
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Conversation thread not found")
+    return {"deleted": True}
+
+
+@router.delete(
+    "/threads/{thread_id}/messages/{message_id}", dependencies=[Depends(require_local)]
+)
+def delete_message(thread_id: UUID, message_id: UUID) -> dict[str, bool]:
+    from core.file_cleanup import FileCleanupError
+    from services import gemma4_conversations
+
+    try:
+        deleted = gemma4_conversations.delete_message(str(thread_id), str(message_id))
+    except FileCleanupError as exc:
+        raise HTTPException(status_code=500, detail="Could not delete message audio") from exc
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Conversation message not found")
+    return {"deleted": True}
+
+
+@router.put(
+    "/threads/{thread_id}/messages/{message_id}/audio",
+    dependencies=[Depends(require_local)],
+)
+def attach_audio(
+    thread_id: UUID,
+    message_id: UUID,
+    request: AttachAudioRequest,
+) -> dict[str, Any]:
+    from services import gemma4_conversations
+
+    try:
+        message = gemma4_conversations.attach_generated_audio(
+            str(thread_id), str(message_id), request.audio_id, request.profile_id
+        )
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except (OSError, ValueError) as exc:
+        raise HTTPException(status_code=500, detail="Could not store message audio") from exc
+    return _message_payload(message)
+
+
+@router.get(
+    "/threads/{thread_id}/messages/{message_id}/audio",
+    dependencies=[Depends(require_local)],
+)
+def message_audio(thread_id: UUID, message_id: UUID) -> FileResponse:
+    from services import gemma4_conversations
+
+    path = gemma4_conversations.audio_file(str(thread_id), str(message_id))
+    if path is None:
+        raise HTTPException(status_code=404, detail="Conversation audio not found")
+    return FileResponse(path, media_type="audio/wav", filename=f"{message_id}.wav")
+
+
 @router.get("/status", dependencies=[Depends(require_local)])
 def status() -> dict[str, Any]:
     """Report configuration without loading or downloading model weights."""
@@ -160,12 +276,29 @@ async def text_turn(request: TextTurnRequest) -> dict[str, str]:
     if not text:
         raise HTTPException(status_code=422, detail="text must not be blank")
     try:
-        return await _answer(
+        result = await _answer(
             _backend(),
             text,
             request.persona,
             _history(json.dumps(request.history)),
         )
+        if request.thread_id:
+            from services import gemma4_conversations
+
+            user_message_id = str(request.user_message_id or uuid4())
+            assistant_message_id = str(request.assistant_message_id or uuid4())
+            gemma4_conversations.begin_turn(
+                str(request.thread_id), text, request.persona, request.audio_requested,
+                user_message_id, assistant_message_id,
+            )
+            gemma4_conversations.complete_message(
+                str(request.thread_id), assistant_message_id, result["reply"]
+            )
+            result.update(
+                user_message_id=user_message_id,
+                assistant_message_id=assistant_message_id,
+            )
+        return result
     except HTTPException:
         raise
     except Exception as exc:
@@ -186,8 +319,24 @@ def text_turn_stream(request: TextTurnRequest) -> StreamingResponse:
             _history(json.dumps(request.history)),
         )
         model_name = backend.model_name
+        thread_id = str(request.thread_id) if request.thread_id else None
+        user_message_id = str(request.user_message_id or uuid4())
+        assistant_message_id = str(request.assistant_message_id or uuid4())
+        if thread_id:
+            from services import gemma4_conversations
+
+            gemma4_conversations.begin_turn(
+                thread_id,
+                text,
+                request.persona,
+                request.audio_requested,
+                user_message_id,
+                assistant_message_id,
+            )
     except HTTPException:
         raise
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail="Conversation thread not found") from exc
     except Exception as exc:
         raise _unavailable(exc) from exc
 
@@ -203,11 +352,27 @@ def text_turn_stream(request: TextTurnRequest) -> StreamingResponse:
             reply = "".join(parts).strip()
             if not reply:
                 raise RuntimeError("Gemma 4 returned an empty response")
-            yield json.dumps(
-                {"type": "done", "transcript": text, "reply": reply, "model": model_name},
-                ensure_ascii=False,
-            ) + "\n"
+            if thread_id:
+                from services import gemma4_conversations
+
+                gemma4_conversations.complete_message(thread_id, assistant_message_id, reply)
+            done_event: dict[str, Any] = {
+                "type": "done",
+                "transcript": text,
+                "reply": reply,
+                "model": model_name,
+            }
+            if thread_id:
+                done_event.update(
+                    user_message_id=user_message_id,
+                    assistant_message_id=assistant_message_id,
+                )
+            yield json.dumps(done_event, ensure_ascii=False) + "\n"
         except Exception as exc:
+            if thread_id:
+                from services import gemma4_conversations
+
+                gemma4_conversations.fail_message(thread_id, assistant_message_id)
             logger.warning("Gemma 4 assistant stream failed: %s", exc)
             yield json.dumps(
                 {"type": "error", "detail": _unavailable(exc).detail},
@@ -226,7 +391,9 @@ async def turn(
     audio: Annotated[UploadFile, File(...)],
     persona: Annotated[str, Form()] = DEFAULT_PERSONA,
     history_json: Annotated[str, Form()] = "[]",
-) -> dict[str, str]:
+    thread_id: Annotated[UUID | None, Form()] = None,
+    audio_requested: Annotated[bool, Form()] = True,
+) -> dict[str, Any]:
     """Let Gemma listen, reason over the conversation, and return reply text."""
     audio_format = _audio_format(audio)
     audio_bytes = await audio.read(MAX_AUDIO_BYTES + 1)
@@ -250,7 +417,24 @@ async def turn(
         if not transcript:
             raise RuntimeError("Gemma 4 returned an empty transcription")
 
-        return await _answer(backend, transcript, persona, history)
+        result = await _answer(backend, transcript, persona, history)
+        if thread_id:
+            from services import gemma4_conversations
+
+            user_message_id = str(uuid4())
+            assistant_message_id = str(uuid4())
+            gemma4_conversations.begin_turn(
+                str(thread_id), transcript, persona, audio_requested,
+                user_message_id, assistant_message_id,
+            )
+            gemma4_conversations.complete_message(
+                str(thread_id), assistant_message_id, result["reply"]
+            )
+            result.update(
+                user_message_id=user_message_id,
+                assistant_message_id=assistant_message_id,
+            )
+        return result
     except HTTPException:
         raise
     except Exception as exc:

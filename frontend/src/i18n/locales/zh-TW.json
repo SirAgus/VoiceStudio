@@ -2731,7 +2731,7 @@
     "title": "Gemma 4 語音助理", "subtitle": "Gemma 在本機聆聽與思考，VoiceStudio 朗讀回答。",
     "voice": "朗讀聲音", "default_voice": "預設 TTS 聲音", "persona": "助理角色", "default_persona": "你是一名簡潔、樂於助人的語音助理。請使用使用者所用的語言回答。",
     "spoken_reply": "Gemma 4 回答", "failed": "語音對話失敗。", "listening": "正在聆聽…",
-    "thinking": "正在思考…", "speaking": "正在說話…", "ready": "準備就緒", "empty": "按「對話」開始說話，說完後按「停止」。",
+    "thinking": "正在思考…", "speaking": "正在說話…", "ready": "準備就緒", "empty": "按「對話」開始說話，說完後按「停止」。", "threads": "執行緒", "new_thread": "新增執行緒", "delete_thread": "刪除執行緒", "delete_message": "刪除訊息", "audio_reply": "音訊回覆",
     "clear": "清除", "stop": "停止", "talk": "對話", "write": "輸入訊息…", "send": "傳送"
   },
   "convert": {

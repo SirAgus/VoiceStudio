@@ -19,6 +19,7 @@ the frozen-backend fallback mirror it for their toolchains.
 - Gemma, the VoiceStudio API, and the browser UI can now start together with one development command
 - First launch now waits for the Aggressive model download and health check before opening the API and UI
 - Typed Gemma replies now appear immediately and stream into a visible thinking bubble before TTS playback
+- Gemma conversations now persist as SQLite threads; deleting messages or threads removes their owned audio, and each send can opt into TTS
 
 ### Added
 
