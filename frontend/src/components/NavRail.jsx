@@ -131,39 +131,26 @@ export default function NavRail({
         ))}
       </div>
       <div className="flex flex-col items-center gap-[8px]">
-        {gemmaMode ? (
-          <div className="gemma-rail-utilities flex items-center gap-0.5">
-            <button
-              type="button"
-              title={t('settings.theme')}
-              aria-label={t('settings.theme')}
-              className={`${RAIL_BTN_BASE} gemma-theme-toggle text-[var(--chrome-fg-dim)] hover:text-[var(--chrome-fg)]`}
-              onClick={onToggleGemmaTheme}
-            >
-              {gemmaTheme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-              <span className={railLabelCls(side)}>{t('settings.theme')}</span>
-            </button>
-            {footerItems.map((it) => (
-              <RailBtn
-                key={it.id}
-                {...it}
-                side={side}
-                active={mode === it.id}
-                onClick={() => setMode(it.id)}
-              />
-            ))}
-          </div>
-        ) : (
-          footerItems.map((it) => (
-            <RailBtn
-              key={it.id}
-              {...it}
-              side={side}
-              active={mode === it.id}
-              onClick={() => setMode(it.id)}
-            />
-          ))
+        {gemmaMode && (
+          <button
+            type="button"
+            title={t('settings.theme')}
+            aria-label={t('settings.theme')}
+            className={`${RAIL_BTN_BASE} gemma-theme-toggle text-[var(--chrome-fg-dim)] hover:bg-[var(--chrome-hover-bg)] hover:text-[var(--chrome-fg)]`}
+            onClick={onToggleGemmaTheme}
+          >
+            {gemmaTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         )}
+        {footerItems.map((it) => (
+          <RailBtn
+            key={it.id}
+            {...it}
+            side={side}
+            active={mode === it.id}
+            onClick={() => setMode(it.id)}
+          />
+        ))}
         <button
           onClick={onFlipSide}
           title={side === 'left' ? t('nav.move_rail_right') : t('nav.move_rail_left')}

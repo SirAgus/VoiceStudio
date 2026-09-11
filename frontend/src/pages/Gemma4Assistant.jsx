@@ -338,7 +338,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
 
   return (
     <div className="gemma-assistant-page h-full min-h-0 overflow-hidden px-4 py-5 font-sans md:px-8 md:py-6">
-      <div className="mx-auto flex h-full min-h-0 w-full max-w-[980px] flex-col gap-5">
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-[1180px] flex-col gap-5">
         <header className="gemma-app-card flex shrink-0 items-start justify-between gap-4 rounded-2xl p-5 backdrop-blur-xl md:p-6">
           <div className="flex items-start gap-4">
             <span className="gemma-bot-avatar flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm">
@@ -371,10 +371,15 @@ export default function Gemma4Assistant({ profiles = [] }) {
           </button>
         </header>
 
-        {configOpen ? (
-          <Panel className="gemma-app-card shrink-0 rounded-2xl p-5 backdrop-blur-xl">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="flex items-end gap-[8px]">
+        <div
+          className={`gemma-workspace grid min-h-0 flex-1 gap-5 ${
+            configOpen ? 'is-settings-open' : 'is-settings-closed'
+          }`}
+        >
+          {configOpen ? (
+            <Panel className="gemma-chat-settings gemma-app-card min-h-0 rounded-2xl p-5 backdrop-blur-xl">
+              <div className="grid gap-5">
+                <div className="flex flex-col gap-2">
                 <label className="flex min-w-0 flex-1 flex-col gap-[6px] text-xs font-semibold text-stone-400">
                   <span className="flex items-center gap-1.5">
                     <GitBranch size={13} className="text-amber-400" />{' '}
@@ -399,26 +404,28 @@ export default function Gemma4Assistant({ profiles = [] }) {
                     ))}
                   </Select>
                 </label>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="gemma-button-secondary rounded-xl"
-                  disabled={isBusy}
-                  onClick={createThread}
-                >
-                  {t('gemma4_assistant.new_thread')}
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="gemma-button-danger rounded-xl"
-                  disabled={isBusy}
-                  onClick={removeThread}
-                >
-                  <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
-                </Button>
-              </div>
-              <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="gemma-button-secondary rounded-xl"
+                      disabled={isBusy}
+                      onClick={createThread}
+                    >
+                      {t('gemma4_assistant.new_thread')}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="gemma-button-danger rounded-xl"
+                      disabled={isBusy}
+                      onClick={removeThread}
+                    >
+                      <Trash2 size={15} /> {t('gemma4_assistant.delete_thread')}
+                    </Button>
+                  </div>
+                </div>
+                <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
                 <span className="flex items-center gap-1.5">
                   <Volume2 size={13} className="text-amber-400" /> {t('gemma4_assistant.voice')}
                 </span>
@@ -434,8 +441,8 @@ export default function Gemma4Assistant({ profiles = [] }) {
                     </option>
                   ))}
                 </Select>
-              </label>
-              <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400 md:col-span-2">
+                </label>
+                <label className="flex flex-col gap-[6px] text-xs font-semibold text-stone-400">
                 <span className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <Sparkles size={13} className="text-amber-400" />{' '}
@@ -451,15 +458,15 @@ export default function Gemma4Assistant({ profiles = [] }) {
                   value={persona}
                   onChange={(event) => setPersona(event.target.value)}
                 />
-              </label>
-            </div>
-          </Panel>
-        ) : null}
+                </label>
+              </div>
+            </Panel>
+          ) : null}
 
-        <section
-          ref={chatScrollRef}
-          className="gemma-chat-scroll flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-1 py-2"
-        >
+          <section
+            ref={chatScrollRef}
+            className="gemma-chat-scroll flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-1 py-2"
+          >
           {turns.length === 0 ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-[8px] text-center text-fg-muted">
               <Brain size={34} className="opacity-40" />
@@ -562,12 +569,12 @@ export default function Gemma4Assistant({ profiles = [] }) {
               </div>
             ))
           )}
-        </section>
+          </section>
 
-        <form
-          className="gemma-app-card gemma-composer shrink-0 rounded-2xl p-3 backdrop-blur-xl"
-          onSubmit={handleTextSubmit}
-        >
+          <form
+            className="gemma-app-card gemma-composer shrink-0 rounded-2xl p-3 backdrop-blur-xl"
+            onSubmit={handleTextSubmit}
+          >
           <div className="mb-3 flex items-center justify-between px-2 text-xs font-semibold text-stone-300">
             <button
               type="button"
@@ -614,7 +621,8 @@ export default function Gemma4Assistant({ profiles = [] }) {
               <span className="sr-only">{t('gemma4_assistant.send')}</span>
             </Button>
           </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
