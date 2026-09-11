@@ -4,10 +4,12 @@ from __future__ import annotations
 import base64
 import json
 import logging
+from collections.abc import Iterator
 from typing import Annotated, Any
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from api.dependencies import require_local
@@ -103,11 +105,7 @@ async def _answer(
 ) -> dict[str, str]:
     import asyncio
 
-    messages: list[dict[str, str]] = [
-        {"role": "system", "content": (persona.strip() or DEFAULT_PERSONA)[:8000]},
-        *history,
-        {"role": "user", "content": transcript},
-    ]
+    messages = _messages(transcript, persona, history)
     reply = await asyncio.to_thread(
         backend.chat_messages,
         messages=messages,
@@ -116,6 +114,18 @@ async def _answer(
     if not reply.strip():
         raise RuntimeError("Gemma 4 returned an empty response")
     return {"transcript": transcript, "reply": reply.strip(), "model": backend.model_name}
+
+
+def _messages(
+    transcript: str,
+    persona: str,
+    history: list[dict[str, str]],
+) -> list[dict[str, str]]:
+    return [
+        {"role": "system", "content": (persona.strip() or DEFAULT_PERSONA)[:8000]},
+        *history,
+        {"role": "user", "content": transcript},
+    ]
 
 
 def _unavailable(exc: Exception) -> HTTPException:
@@ -160,6 +170,55 @@ async def text_turn(request: TextTurnRequest) -> dict[str, str]:
         raise
     except Exception as exc:
         raise _unavailable(exc) from exc
+
+
+@router.post("/text-turn/stream", dependencies=[Depends(require_local)])
+def text_turn_stream(request: TextTurnRequest) -> StreamingResponse:
+    """Stream visible reply fragments for a typed local-model turn."""
+    text = request.text.strip()
+    if not text:
+        raise HTTPException(status_code=422, detail="text must not be blank")
+    try:
+        backend = _backend()
+        messages = _messages(
+            text,
+            request.persona,
+            _history(json.dumps(request.history)),
+        )
+        model_name = backend.model_name
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise _unavailable(exc) from exc
+
+    def events() -> Iterator[str]:
+        parts: list[str] = []
+        try:
+            for fragment in backend.stream_chat_messages(messages=messages, temperature=0.6):
+                parts.append(fragment)
+                yield json.dumps(
+                    {"type": "delta", "text": fragment},
+                    ensure_ascii=False,
+                ) + "\n"
+            reply = "".join(parts).strip()
+            if not reply:
+                raise RuntimeError("Gemma 4 returned an empty response")
+            yield json.dumps(
+                {"type": "done", "transcript": text, "reply": reply, "model": model_name},
+                ensure_ascii=False,
+            ) + "\n"
+        except Exception as exc:
+            logger.warning("Gemma 4 assistant stream failed: %s", exc)
+            yield json.dumps(
+                {"type": "error", "detail": _unavailable(exc).detail},
+                ensure_ascii=False,
+            ) + "\n"
+
+    return StreamingResponse(
+        events(),
+        media_type="application/x-ndjson",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.post("/turn", dependencies=[Depends(require_local)])

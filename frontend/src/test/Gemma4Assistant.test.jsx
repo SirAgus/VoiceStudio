@@ -1,17 +1,17 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import i18n from '../i18n';
 
-const runGemma4TextTurn = vi.fn();
+const streamGemma4TextTurn = vi.fn();
 const synthesizeAssistantReply = vi.fn();
 const playBlobAudio = vi.fn();
 
 vi.mock('../api/gemma4Assistant', () => ({
   runGemma4Turn: vi.fn(),
-  runGemma4TextTurn: (...args) => runGemma4TextTurn(...args),
+  streamGemma4TextTurn: (...args) => streamGemma4TextTurn(...args),
   synthesizeAssistantReply: (...args) => synthesizeAssistantReply(...args),
 }));
 vi.mock('../hooks/useRecording', () => ({
@@ -30,14 +30,9 @@ import Gemma4Assistant from '../pages/Gemma4Assistant';
 
 describe('Gemma4Assistant typed conversation', () => {
   beforeEach(() => {
-    runGemma4TextTurn.mockReset();
+    streamGemma4TextTurn.mockReset();
     synthesizeAssistantReply.mockReset();
     playBlobAudio.mockReset();
-    runGemma4TextTurn.mockResolvedValue({
-      transcript: 'Hola',
-      reply: '¿Cómo estás?',
-      model: 'local-model',
-    });
     synthesizeAssistantReply.mockResolvedValue(new Blob(['wav'], { type: 'audio/wav' }));
     playBlobAudio.mockResolvedValue(undefined);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:assistant-reply');
@@ -45,6 +40,15 @@ describe('Gemma4Assistant typed conversation', () => {
   });
 
   it('shows typed text and keeps a replayable audio response', async () => {
+    let emitFragment;
+    let finishStream;
+    streamGemma4TextTurn.mockImplementation(
+      (_text, _persona, _history, onDelta) =>
+        new Promise((resolve) => {
+          emitFragment = onDelta;
+          finishStream = resolve;
+        }),
+    );
     const { container } = render(
       <I18nextProvider i18n={i18n}>
         <Gemma4Assistant profiles={[{ id: 'voice-1', name: 'Voz' }]} />
@@ -56,8 +60,14 @@ describe('Gemma4Assistant typed conversation', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: i18n.t('gemma4_assistant.send') }));
 
-    await waitFor(() => expect(runGemma4TextTurn).toHaveBeenCalled());
-    expect(await screen.findByText('Hola')).toBeInTheDocument();
+    expect(screen.getByText('Hola')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(i18n.t('gemma4_assistant.thinking'));
+    await act(async () => emitFragment('¿Cómo '));
+    expect(screen.getByText('¿Cómo')).toBeInTheDocument();
+    await act(async () => {
+      emitFragment('estás?');
+      finishStream({ transcript: 'Hola', reply: '¿Cómo estás?', model: 'local-model' });
+    });
     expect(await screen.findByText('¿Cómo estás?')).toBeInTheDocument();
     await waitFor(() =>
       expect(synthesizeAssistantReply).toHaveBeenCalledWith('¿Cómo estás?', 'voice-1'),

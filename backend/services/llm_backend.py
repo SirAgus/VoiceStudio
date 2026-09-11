@@ -29,6 +29,7 @@ from __future__ import annotations
 import logging
 import os
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from typing import Optional
 
 logger = logging.getLogger("omnivoice.llm")
@@ -174,6 +175,37 @@ class OpenAICompatBackend(LLMBackend):
             **kw,
         )
         return (res.choices[0].message.content or "").strip()
+
+    def stream_chat_messages(
+        self,
+        *,
+        messages: list[dict],
+        timeout: Optional[float] = None,
+        temperature: Optional[float] = None,
+    ) -> Iterator[str]:
+        """Yield visible assistant content from an OpenAI-compatible stream."""
+        if timeout is None:
+            try:
+                timeout = float(os.environ.get("OMNIVOICE_LLM_TIMEOUT", "45"))
+            except ValueError:
+                timeout = 45.0
+        kw = {}
+        if temperature is not None:
+            kw["temperature"] = temperature
+        stream = self._get_client().chat.completions.create(
+            model=self.model_name,
+            timeout=timeout,
+            messages=messages,
+            stream=True,
+            **kw,
+        )
+        for chunk in stream:
+            choices = getattr(chunk, "choices", None)
+            if not choices:
+                continue
+            content = getattr(getattr(choices[0], "delta", None), "content", None)
+            if isinstance(content, str) and content:
+                yield content
 
 
 # ── Off — explicit no-LLM path ────────────────────────────────────────────

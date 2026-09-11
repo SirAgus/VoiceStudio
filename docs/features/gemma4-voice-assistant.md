@@ -11,7 +11,9 @@ Audio and text stay on the machine. The model server is a separate local process
 
 You can also type a message instead of recording it. Both sides remain visible
 in the conversation, and every generated answer has audio controls so it can be
-paused or replayed.
+paused or replayed. The sent message appears immediately; a thinking bubble then
+renders Gemma's visible response fragments as they arrive. TTS starts after the
+text completes.
 
 ## Setup
 

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+from types import SimpleNamespace
+
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -16,6 +19,11 @@ class _FakeBackend:
     def chat_messages(self, **kwargs):
         self.calls.append(kwargs)
         return "Hola, mundo" if len(self.calls) == 1 else "Hola. ¿En qué puedo ayudarte?"
+
+    def stream_chat_messages(self, **kwargs):
+        self.calls.append(kwargs)
+        yield "Hola"
+        yield ". ¿En qué puedo ayudarte?"
 
 
 def _client(monkeypatch):
@@ -93,7 +101,62 @@ def test_text_turn_rejects_blank_messages(monkeypatch):
     assert response.status_code == 422
 
 
+def test_text_turn_streams_visible_fragments_and_completion(monkeypatch):
+    client, backend = _client(monkeypatch)
+    with client.stream(
+        "POST",
+        "/gemma4-assistant/text-turn/stream",
+        json={
+            "text": "Cuéntame algo",
+            "persona": "Responde brevemente.",
+            "history": [],
+        },
+    ) as response:
+        events = [json.loads(line) for line in response.iter_lines()]
+
+    assert response.status_code == 200
+    assert events == [
+        {"type": "delta", "text": "Hola"},
+        {"type": "delta", "text": ". ¿En qué puedo ayudarte?"},
+        {
+            "type": "done",
+            "transcript": "Cuéntame algo",
+            "reply": "Hola. ¿En qué puedo ayudarte?",
+            "model": gemma4_assistant.MODEL_ID,
+        },
+    ]
+    assert backend.calls[0]["messages"][-1] == {
+        "role": "user",
+        "content": "Cuéntame algo",
+    }
+
+
 def test_gemma4_backend_refuses_remote_audio_destination(monkeypatch):
     monkeypatch.setenv("GEMMA4_BASE_URL", "https://remote.example/v1")
     with pytest.raises(RuntimeError, match="loopback"):
         gemma4_assistant._backend()
+
+
+def test_openai_compat_backend_yields_only_visible_stream_content(monkeypatch):
+    from services.llm_backend import OpenAICompatBackend
+
+    backend = OpenAICompatBackend()
+    calls = []
+
+    def create(**kwargs):
+        calls.append(kwargs)
+        return iter([
+            SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content="Hola"))]),
+            SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content=None))]),
+            SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content=" mundo"))]),
+        ])
+
+    backend._client = SimpleNamespace(
+        chat=SimpleNamespace(completions=SimpleNamespace(create=create)),
+    )
+    monkeypatch.setattr(OpenAICompatBackend, "model_name", property(lambda _self: "local"))
+
+    fragments = list(backend.stream_chat_messages(messages=[{"role": "user", "content": "Hi"}]))
+
+    assert fragments == ["Hola", " mundo"]
+    assert calls[0]["stream"] is True

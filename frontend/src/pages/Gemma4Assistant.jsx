@@ -3,7 +3,12 @@ import { Bot, Brain, Mic, Send, Square, Trash2, Volume2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 
-import { runGemma4TextTurn, runGemma4Turn, synthesizeAssistantReply } from '../api/gemma4Assistant';
+import {
+  streamGemma4TextTurn,
+  runGemma4Turn,
+  synthesizeAssistantReply,
+} from '../api/gemma4Assistant';
+import { MessageResponse } from '../components/ai-elements/message';
 import useRecording from '../hooks/useRecording';
 import { playBlobAudio } from '../utils/media';
 import { Button, Panel, Select, Textarea } from '../ui';
@@ -17,28 +22,31 @@ export default function Gemma4Assistant({ profiles = [] }) {
   const [draft, setDraft] = useState('');
   const audioUrls = useRef(new Set());
 
-  useEffect(() => () => {
-    for (const url of audioUrls.current) URL.revokeObjectURL(url);
-    audioUrls.current.clear();
-  });
+  useEffect(
+    () => () => {
+      for (const url of audioUrls.current) URL.revokeObjectURL(url);
+      audioUrls.current.clear();
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!profileId && profiles[0]?.id) setProfileId(profiles[0].id);
   }, [profileId, profiles]);
 
-  const history = useMemo(() => turns.map(({ role, text }) => ({ role, content: text })), [turns]);
+  const history = useMemo(
+    () =>
+      turns
+        .filter((turn) => !turn.error && turn.text?.trim())
+        .map(({ role, text }) => ({ role, content: text })),
+    [turns],
+  );
 
-  const presentReply = useCallback(
-    async (result) => {
-      const replyId = crypto.randomUUID();
-      setTurns((current) => [
-        ...current,
-        { role: 'user', text: result.transcript },
-        { id: replyId, role: 'assistant', text: result.reply },
-      ]);
+  const speakReply = useCallback(
+    async (replyId, reply) => {
       setPhase('speaking');
       try {
-        const speech = await synthesizeAssistantReply(result.reply, profileId || undefined);
+        const speech = await synthesizeAssistantReply(reply, profileId || undefined);
         const audioUrl = URL.createObjectURL(speech);
         audioUrls.current.add(audioUrl);
         setTurns((current) =>
@@ -50,6 +58,19 @@ export default function Gemma4Assistant({ profiles = [] }) {
       }
     },
     [profileId, t],
+  );
+
+  const presentReply = useCallback(
+    async (result) => {
+      const replyId = crypto.randomUUID();
+      setTurns((current) => [
+        ...current,
+        { id: crypto.randomUUID(), role: 'user', text: result.transcript },
+        { id: replyId, role: 'assistant', text: result.reply },
+      ]);
+      await speakReply(replyId, result.reply);
+    },
+    [speakReply],
   );
 
   const handleAudio = useCallback(
@@ -72,18 +93,42 @@ export default function Gemma4Assistant({ profiles = [] }) {
       event.preventDefault();
       const text = draft.trim();
       if (!text || phase !== 'idle') return;
+      const replyId = crypto.randomUUID();
       setDraft('');
       setPhase('thinking');
+      setTurns((current) => [
+        ...current,
+        { id: crypto.randomUUID(), role: 'user', text },
+        { id: replyId, role: 'assistant', text: '', isStreaming: true },
+      ]);
       try {
-        await presentReply(await runGemma4TextTurn(text, persona, history));
+        const result = await streamGemma4TextTurn(text, persona, history, (fragment) => {
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === replyId ? { ...turn, text: `${turn.text}${fragment}` } : turn,
+            ),
+          );
+        });
+        setTurns((current) =>
+          current.map((turn) =>
+            turn.id === replyId ? { ...turn, text: result.reply, isStreaming: false } : turn,
+          ),
+        );
+        await speakReply(replyId, result.reply);
       } catch (error) {
-        setDraft(text);
+        setTurns((current) =>
+          current.map((turn) =>
+            turn.id === replyId
+              ? { ...turn, text: t('gemma4_assistant.failed'), isStreaming: false, error: true }
+              : turn,
+          ),
+        );
         toast.error(error?.message || t('gemma4_assistant.failed'));
       } finally {
         setPhase('idle');
       }
     },
-    [draft, history, persona, phase, presentReply, t],
+    [draft, history, persona, phase, speakReply, t],
   );
 
   const clearTurns = useCallback(() => {
@@ -150,14 +195,28 @@ export default function Gemma4Assistant({ profiles = [] }) {
           ) : (
             turns.map((turn, index) => (
               <div
-                key={`${turn.role}-${index}`}
+                key={turn.id || `${turn.role}-${index}`}
+                aria-busy={turn.isStreaming || undefined}
                 className={`max-w-[82%] rounded-[16px] px-[14px] py-[10px] text-sm leading-relaxed ${
                   turn.role === 'user'
                     ? 'ml-auto bg-[var(--color-brand)] text-white'
                     : 'mr-auto border border-[var(--color-border)] bg-bg-elev-2 text-fg'
                 }`}
               >
-                {turn.text}
+                {turn.isStreaming ? (
+                  <span
+                    className="mb-[6px] flex items-center gap-[6px] text-xs text-fg-muted"
+                    role="status"
+                  >
+                    <Brain size={14} className="animate-pulse" />
+                    {t('gemma4_assistant.thinking')}
+                  </span>
+                ) : null}
+                {turn.role === 'assistant' && turn.text ? (
+                  <MessageResponse isAnimating={turn.isStreaming}>{turn.text}</MessageResponse>
+                ) : (
+                  turn.text
+                )}
                 {turn.audioUrl ? (
                   <audio
                     className="mt-[10px] block h-[36px] w-full min-w-[260px]"
