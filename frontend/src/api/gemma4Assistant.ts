@@ -17,6 +17,7 @@ export interface AssistantMessage {
   status: 'streaming' | 'complete' | 'error';
   audio_requested: boolean;
   audio_url?: string | null;
+  created_at?: number;
 }
 
 export interface AssistantThread {

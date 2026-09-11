@@ -2728,6 +2728,7 @@
     "none_selected": "Chưa chọn giọng nào — hãy mô tả một giọng, thả tệp âm thanh, hoặc chọn bên dưới."
   },
   "gemma4_assistant": {
+    "edited_locally": "Đã chỉnh sửa cục bộ",
     "title": "Trợ lý giọng nói Gemma 4", "subtitle": "Gemma nghe và suy nghĩ cục bộ; VoiceStudio đọc câu trả lời.",
     "voice": "Giọng nói", "default_voice": "Giọng TTS mặc định", "persona": "Tính cách trợ lý", "default_persona": "Bạn là trợ lý giọng nói ngắn gọn và hữu ích. Hãy trả lời bằng ngôn ngữ của người dùng.",
     "spoken_reply": "Phản hồi Gemma 4", "failed": "Lượt thoại thất bại.", "listening": "Đang nghe…",

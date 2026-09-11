@@ -2728,6 +2728,7 @@
     "none_selected": "Ses seçilmedi — birini tarif edin, ses dosyası bırakın veya aşağıdan seçin."
   },
   "gemma4_assistant": {
+    "edited_locally": "Yerel olarak düzenlendi",
     "title": "Gemma 4 sesli asistan", "subtitle": "Gemma yerel olarak dinler ve düşünür; VoiceStudio yanıtı seslendirir.",
     "voice": "Konuşma sesi", "default_voice": "Varsayılan TTS sesi", "persona": "Asistan kişiliği", "default_persona": "Kısa ve yararlı bir sesli asistansın. Kullanıcının dilinde yanıt ver.",
     "spoken_reply": "Gemma 4 yanıtı", "failed": "Sesli konuşma başarısız oldu.", "listening": "Dinliyor…",

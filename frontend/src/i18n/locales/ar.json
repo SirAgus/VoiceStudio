@@ -2728,6 +2728,7 @@
     "none_selected": "لم يُحدد أي صوت — صِف واحدًا، أو أسقط ملفًا صوتيًا، أو اختر من الأسفل."
   },
   "gemma4_assistant": {
+    "edited_locally": "تم التعديل محليًا",
     "title": "مساعد Gemma 4 الصوتي", "subtitle": "يستمع Gemma ويفكر محليًا، ثم ينطق VoiceStudio الإجابة.",
     "voice": "صوت التحدث", "default_voice": "صوت TTS الافتراضي", "persona": "شخصية المساعد", "default_persona": "أنت مساعد صوتي موجز ومفيد. أجب باللغة التي يستخدمها المستخدم.",
     "spoken_reply": "إجابة Gemma 4", "failed": "فشلت المحادثة الصوتية.", "listening": "جارٍ الاستماع…",

@@ -2728,6 +2728,7 @@
     "none_selected": "Nie wybrano głosu — opisz go, upuść audio albo wybierz poniżej."
   },
   "gemma4_assistant": {
+    "edited_locally": "Edytowano lokalnie",
     "title": "Asystent głosowy Gemma 4", "subtitle": "Gemma słucha i myśli lokalnie; VoiceStudio wypowiada odpowiedź.",
     "voice": "Głos odpowiedzi", "default_voice": "Domyślny głos TTS", "persona": "Osobowość asystenta", "default_persona": "Jesteś zwięzłym i pomocnym asystentem głosowym. Odpowiadaj w języku użytkownika.",
     "spoken_reply": "Odpowiedź Gemma 4", "failed": "Tura głosowa nie powiodła się.", "listening": "Słuchanie…",

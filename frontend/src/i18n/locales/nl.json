@@ -2728,6 +2728,7 @@
     "none_selected": "Geen stem geselecteerd — beschrijf er een, zet audio neer of kies hieronder."
   },
   "gemma4_assistant": {
+    "edited_locally": "Lokaal bewerkt",
     "title": "Gemma 4-spraakassistent", "subtitle": "Gemma luistert en denkt lokaal; VoiceStudio spreekt het antwoord uit.",
     "voice": "Spreekstem", "default_voice": "Standaard TTS-stem", "persona": "Assistentpersona", "default_persona": "Je bent een beknopte, behulpzame spraakassistent. Antwoord in de taal van de gebruiker.",
     "spoken_reply": "Antwoord van Gemma 4", "failed": "De spraakbeurt is mislukt.", "listening": "Luisteren…",

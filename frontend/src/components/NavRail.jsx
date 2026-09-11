@@ -9,11 +9,11 @@ import {
   House,
   MessageCircle,
   Mic,
+  Moon,
   Sun,
   Waves,
 } from 'lucide-react';
 import { NAV_ITEMS as ITEM_DEFS, NAV_FOOTER_ITEMS as FOOTER_DEFS } from './navItems';
-import { useAppStore } from '../store';
 
 // Shared icon-button base for the chrome rail (was `.rail-btn`). `group` enables
 // the hover-reveal of the per-button tooltip label below.
@@ -43,6 +43,7 @@ function RailBtn({ active, Icon, label, accent, side, onClick }) {
       onClick={onClick}
       title={label}
       aria-label={label}
+      aria-current={active ? 'page' : undefined}
       className={`${RAIL_BTN_BASE} ${stateCls}`}
       style={{ '--rail-accent': accent }}
     >
@@ -52,10 +53,15 @@ function RailBtn({ active, Icon, label, accent, side, onClick }) {
   );
 }
 
-export default function NavRail({ mode, setMode, side = 'left', onFlipSide }) {
+export default function NavRail({
+  mode,
+  setMode,
+  side = 'left',
+  onFlipSide,
+  gemmaTheme = 'dark',
+  onToggleGemmaTheme,
+}) {
   const { t } = useTranslation();
-  const theme = useAppStore((state) => state.theme);
-  const setTheme = useAppStore((state) => state.setTheme);
   const items = React.useMemo(
     () => ITEM_DEFS.map((d) => ({ ...d, label: t(`nav.${d.tKey}`) })),
     [t],
@@ -130,10 +136,10 @@ export default function NavRail({ mode, setMode, side = 'left', onFlipSide }) {
             type="button"
             title={t('settings.theme')}
             aria-label={t('settings.theme')}
-            className={`${RAIL_BTN_BASE} text-[var(--chrome-fg-dim)] hover:bg-[var(--chrome-hover-bg)] hover:text-[var(--chrome-fg)]`}
-            onClick={() => setTheme(theme === 'midnight' ? 'gruvbox' : 'midnight')}
+            className={`${RAIL_BTN_BASE} gemma-theme-toggle text-[var(--chrome-fg-dim)] hover:bg-[var(--chrome-hover-bg)] hover:text-[var(--chrome-fg)]`}
+            onClick={onToggleGemmaTheme}
           >
-            <Sun size={18} />
+            {gemmaTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         )}
         {footerItems.map((it) => (

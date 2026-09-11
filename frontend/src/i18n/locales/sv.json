@@ -2728,6 +2728,7 @@
     "none_selected": "Ingen röst vald — beskriv en, släpp ljud eller välj nedan."
   },
   "gemma4_assistant": {
+    "edited_locally": "Redigerad lokalt",
     "title": "Gemma 4-röstassistent", "subtitle": "Gemma lyssnar och tänker lokalt; VoiceStudio läser upp svaret.",
     "voice": "Talröst", "default_voice": "Standardröst för TTS", "persona": "Assistentens personlighet", "default_persona": "Du är en kortfattad och hjälpsam röstassistent. Svara på användarens språk.",
     "spoken_reply": "Svar från Gemma 4", "failed": "Röstomgången misslyckades.", "listening": "Lyssnar…",

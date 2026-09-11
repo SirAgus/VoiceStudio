@@ -2728,6 +2728,7 @@
     "none_selected": "Belum ada suara yang dipilih — deskripsikan satu, letakkan audio, atau pilih di bawah."
   },
   "gemma4_assistant": {
+    "edited_locally": "Diedit secara lokal",
     "title": "Asisten suara Gemma 4", "subtitle": "Gemma mendengar dan berpikir secara lokal; VoiceStudio mengucapkan jawabannya.",
     "voice": "Suara bicara", "default_voice": "Suara TTS bawaan", "persona": "Kepribadian asisten", "default_persona": "Anda adalah asisten suara yang ringkas dan membantu. Jawab dalam bahasa pengguna.",
     "spoken_reply": "Jawaban Gemma 4", "failed": "Giliran suara gagal.", "listening": "Mendengarkan…",

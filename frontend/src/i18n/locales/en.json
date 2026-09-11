@@ -3229,6 +3229,7 @@
     "none_selected": "No voice selected — describe one, drop audio, or pick below."
   },
   "gemma4_assistant": {
+    "edited_locally": "Edited locally",
     "title": "Gemma 4 voice assistant", "subtitle": "Gemma listens and thinks locally; VoiceStudio speaks the answer.",
     "voice": "Speaking voice", "default_voice": "Default TTS voice", "persona": "Assistant persona", "default_persona": "You are a concise, helpful voice assistant. Reply in the language used by the user.",
     "spoken_reply": "Gemma 4 reply", "failed": "The voice turn failed.", "listening": "Listening…",

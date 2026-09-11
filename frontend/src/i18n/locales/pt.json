@@ -2728,6 +2728,7 @@
     "none_selected": "Nenhuma voz selecionada — descreva uma, solte um áudio ou escolha abaixo."
   },
   "gemma4_assistant": {
+    "edited_locally": "Editado localmente",
     "title": "Assistente de voz Gemma 4", "subtitle": "Gemma ouve e pensa localmente; o VoiceStudio fala a resposta.",
     "voice": "Voz de fala", "default_voice": "Voz TTS padrão", "persona": "Personalidade do assistente", "default_persona": "Você é um assistente de voz conciso e útil. Responda no idioma do usuário.",
     "spoken_reply": "Resposta do Gemma 4", "failed": "O turno de voz falhou.", "listening": "Ouvindo…",

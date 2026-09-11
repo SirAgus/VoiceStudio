@@ -2735,6 +2735,7 @@
     "none_selected": "未选择声音——描述一个、拖入音频，或从下方选择。"
   },
   "gemma4_assistant": {
+    "edited_locally": "已在本地编辑",
     "title": "Gemma 4 语音助手", "subtitle": "Gemma 在本地聆听和思考，VoiceStudio 朗读回答。",
     "voice": "朗读声音", "default_voice": "默认 TTS 声音", "persona": "助手角色", "default_persona": "你是一名简洁、乐于助人的语音助手。请使用用户所用的语言回答。",
     "spoken_reply": "Gemma 4 回答", "failed": "语音对话失败。", "listening": "正在聆听…",

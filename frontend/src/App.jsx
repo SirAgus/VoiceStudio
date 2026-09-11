@@ -228,6 +228,22 @@ function App() {
       return 'left';
     }
   });
+  const [gemmaTheme, setGemmaTheme] = useState(() => {
+    try {
+      return localStorage.getItem('omnivoice.gemmaTheme') === 'light' ? 'light' : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+  const toggleGemmaTheme = useCallback(() => {
+    setGemmaTheme((current) => {
+      const next = current === 'dark' ? 'light' : 'dark';
+      try {
+        localStorage.setItem('omnivoice.gemmaTheme', next);
+      } catch {}
+      return next;
+    });
+  }, []);
   const showCheatsheet = useAppStore((s) => s.showCheatsheet);
   const setShowCheatsheet = useAppStore((s) => s.setShowCheatsheet);
 
@@ -1364,7 +1380,7 @@ function App() {
         isSidebarCollapsed,
         hideSidebar,
         shellSizeClass,
-      })} ${mode === 'talk' ? 'gemma-shell' : ''}`}
+      })} ${mode === 'talk' ? `gemma-shell gemma-theme-${gemmaTheme}` : ''}`}
       style={{ '--ui-scale': effectiveUiScale }}
     >
       {pendingTrimFile && (
@@ -1450,7 +1466,14 @@ function App() {
       />
 
       {navStyle === 'tabs' ? null : (
-        <NavRail mode={mode} setMode={setMode} side={navRailSide} onFlipSide={flipNavRailSide} />
+        <NavRail
+          mode={mode}
+          setMode={setMode}
+          side={navRailSide}
+          onFlipSide={flipNavRailSide}
+          gemmaTheme={gemmaTheme}
+          onToggleGemmaTheme={toggleGemmaTheme}
+        />
       )}
 
       <ModeLifecycleBoundary mode={mode}>

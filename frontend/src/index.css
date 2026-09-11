@@ -3565,6 +3565,29 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
    compact 80px rail, and a thin status footer. Keep this scoped to `talk`
    so the rest of VoiceStudio retains its normal chrome. */
 .app-container.gemma-shell {
+  --gemma-page-bg: #0b0908;
+  --gemma-page-image: radial-gradient(at 0% 0%, rgba(55, 35, 24, 0.55) 0, transparent 50%), radial-gradient(at 100% 100%, rgba(17, 10, 7, 0.8) 0, transparent 50%), radial-gradient(at 50% 0%, rgba(110, 68, 40, 0.2) 0, transparent 50%);
+  --gemma-card-bg: rgba(20, 16, 14, 0.88);
+  --gemma-card-border: rgba(255, 255, 255, 0.09);
+  --gemma-card-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  --gemma-text: #f5f0eb;
+  --gemma-muted: #a89a91;
+  --gemma-subtle: #746860;
+  --gemma-field-bg: #0f0c0a;
+  --gemma-field-border: #4a3022;
+  --gemma-ai-bg: rgba(23, 18, 15, 0.92);
+  --gemma-ai-border: rgba(74, 48, 34, 0.5);
+  --gemma-user-bg: #6f472e;
+  --gemma-user-border: #8b5e3c;
+  --gemma-player-bg: rgba(13, 10, 8, 0.9);
+  --gemma-player-border: rgba(74, 48, 34, 0.45);
+  --gemma-soft-bg: rgba(41, 37, 36, 0.9);
+  --gemma-soft-hover: rgba(68, 64, 60, 0.9);
+  --gemma-accent: #d97706;
+  --gemma-accent-hover: #f59e0b;
+  --gemma-sidebar-bg: rgba(14, 11, 9, 0.96);
+  --gemma-header-bg: rgba(14, 11, 9, 0.88);
+  --gemma-footer-bg: rgba(10, 8, 6, 0.98);
   --chrome-bg: #0e0b09;
   --chrome-fg: #f4eee8;
   --chrome-fg-muted: #b9aaa0;
@@ -3576,8 +3599,46 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   --chrome-accent-bg: rgba(217, 119, 6, 0.14);
   --chrome-accent-border: rgba(217, 119, 6, 0.38);
   --chrome-severity-ok: #10b981;
+  --color-brand: #d97706;
   grid-template-columns: 80px minmax(0, 1fr);
-  background: #0b0908;
+  background: var(--gemma-page-bg);
+}
+
+.app-container.gemma-shell.gemma-theme-light {
+  --gemma-page-bg: #f6f3ee;
+  --gemma-page-image: radial-gradient(at 0% 0%, rgba(215, 192, 167, 0.35) 0, transparent 50%), radial-gradient(at 100% 0%, rgba(190, 156, 123, 0.25) 0, transparent 50%), radial-gradient(at 50% 100%, rgba(246, 241, 232, 0.95) 0, transparent 50%);
+  --gemma-card-bg: rgba(255, 252, 247, 0.88);
+  --gemma-card-border: rgba(139, 94, 60, 0.18);
+  --gemma-card-shadow: 0 12px 32px rgba(74, 48, 34, 0.06);
+  --gemma-text: #2b1c14;
+  --gemma-muted: #765b4b;
+  --gemma-subtle: #a67c52;
+  --gemma-field-bg: rgba(255, 255, 255, 0.96);
+  --gemma-field-border: #d7c0a7;
+  --gemma-ai-bg: rgba(255, 255, 255, 0.92);
+  --gemma-ai-border: rgba(215, 192, 167, 0.6);
+  --gemma-user-bg: #4a3022;
+  --gemma-user-border: #6f472e;
+  --gemma-player-bg: rgba(245, 239, 230, 0.95);
+  --gemma-player-border: rgba(215, 192, 167, 0.6);
+  --gemma-soft-bg: rgba(232, 219, 203, 0.8);
+  --gemma-soft-hover: rgba(215, 192, 167, 0.8);
+  --gemma-accent: #4a3022;
+  --gemma-accent-hover: #2b1c14;
+  --gemma-sidebar-bg: rgba(246, 241, 232, 0.9);
+  --gemma-header-bg: rgba(253, 251, 247, 0.88);
+  --gemma-footer-bg: rgba(246, 241, 232, 0.94);
+  --chrome-bg: #f6f1e8;
+  --chrome-fg: #2b1c14;
+  --chrome-fg-muted: #6f472e;
+  --chrome-fg-dim: #a67c52;
+  --chrome-border: rgba(139, 94, 60, 0.2);
+  --chrome-border-strong: rgba(139, 94, 60, 0.35);
+  --chrome-hover-bg: rgba(215, 192, 167, 0.4);
+  --chrome-accent: #6f472e;
+  --chrome-accent-bg: rgba(111, 71, 46, 0.12);
+  --chrome-accent-border: rgba(111, 71, 46, 0.3);
+  --color-brand: #4a3022;
 }
 
 .app-container.gemma-shell > .nav-rail {
@@ -3587,15 +3648,15 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   box-sizing: border-box;
   padding-top: 12px;
   padding-bottom: 14px;
-  background: rgba(14, 11, 9, 0.96);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--gemma-sidebar-bg);
+  border-right: 1px solid var(--chrome-border);
   border-left: 0;
 }
 
 .app-container.gemma-shell > .main-content {
   grid-column: 2;
   grid-row: 2;
-  background: #0b0908;
+  background: var(--gemma-page-bg);
   overflow: hidden;
 }
 
@@ -3604,8 +3665,8 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   grid-row: 1;
   min-height: 50px;
   padding: 0 22px;
-  background: rgba(14, 11, 9, 0.88);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--gemma-header-bg);
+  border-bottom: 1px solid var(--chrome-border);
 }
 
 .app-container.gemma-shell .header-area h1,
@@ -3637,8 +3698,8 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   grid-row: 4;
   min-height: 28px;
   height: 28px !important;
-  background: rgba(14, 11, 9, 0.98);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--gemma-footer-bg);
+  border-top: 1px solid var(--chrome-border);
 }
 
 .app-container.gemma-shell .logs-footer--open {
@@ -3742,6 +3803,327 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
 
 .gemma-nav-rail > div:last-child button:last-child {
   display: none;
+}
+
+.app-container.gemma-shell .gemma-assistant-page {
+  color: var(--gemma-text);
+  background-color: var(--gemma-page-bg);
+  background-image: var(--gemma-page-image);
+  transition: color 300ms ease, background-color 300ms ease;
+}
+
+.app-container.gemma-shell .gemma-app-card {
+  color: var(--gemma-text);
+  background: var(--gemma-card-bg);
+  border: 1px solid var(--gemma-card-border);
+  box-shadow: var(--gemma-card-shadow);
+  transition: color 300ms ease, background 300ms ease, border-color 300ms ease;
+}
+
+.app-container.gemma-shell .gemma-title {
+  color: var(--gemma-text);
+}
+
+.app-container.gemma-shell .gemma-muted,
+.app-container.gemma-shell .gemma-assistant-page label,
+.app-container.gemma-shell .gemma-assistant-page small {
+  color: var(--gemma-muted);
+}
+
+.app-container.gemma-shell .gemma-bot-avatar,
+.app-container.gemma-shell .gemma-chat-avatar {
+  color: var(--gemma-accent);
+  background: var(--gemma-soft-bg);
+  border: 1px solid var(--gemma-field-border);
+}
+
+.app-container.gemma-shell .gemma-field,
+.app-container.gemma-shell .gemma-message-input {
+  color: var(--gemma-text);
+  background: var(--gemma-field-bg);
+  border-color: var(--gemma-field-border);
+  box-shadow: 0 1px 2px rgba(74, 48, 34, 0.08);
+}
+
+.app-container.gemma-shell .gemma-field:focus,
+.app-container.gemma-shell .gemma-message-input:focus {
+  border-color: var(--gemma-accent);
+  outline: none;
+}
+
+.app-container.gemma-shell .gemma-field::placeholder,
+.app-container.gemma-shell .gemma-message-input::placeholder {
+  color: var(--gemma-subtle);
+}
+
+.app-container.gemma-shell .gemma-settings-button,
+.app-container.gemma-shell .gemma-button-secondary,
+.app-container.gemma-shell .gemma-talk-button {
+  color: var(--gemma-text);
+  background: var(--gemma-soft-bg);
+  border: 1px solid var(--gemma-field-border);
+  box-shadow: 0 1px 2px rgba(74, 48, 34, 0.08);
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.app-container.gemma-shell .gemma-settings-button:hover,
+.app-container.gemma-shell .gemma-button-secondary:hover,
+.app-container.gemma-shell .gemma-talk-button:hover {
+  color: var(--gemma-text);
+  background: var(--gemma-soft-hover);
+  transform: translateY(-1px);
+}
+
+.app-container.gemma-shell .gemma-button-danger {
+  color: #ef6464;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.app-container.gemma-shell .gemma-button-danger:hover {
+  color: #fff;
+  background: #b91c1c;
+  border-color: #dc2626;
+}
+
+.app-container.gemma-shell .gemma-chat-scroll {
+  scrollbar-gutter: stable;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.app-container.gemma-shell .gemma-chat-bubble {
+  box-shadow: 0 8px 18px rgba(43, 28, 20, 0.12);
+  transition: color 300ms ease, background 300ms ease, border-color 300ms ease;
+}
+
+.app-container.gemma-shell .gemma-chat-user {
+  color: #fdfbf7;
+  background: var(--gemma-user-bg);
+  border: 1px solid var(--gemma-user-border);
+}
+
+.app-container.gemma-shell .gemma-chat-ai {
+  color: var(--gemma-text);
+  background: var(--gemma-ai-bg);
+  border: 1px solid var(--gemma-ai-border);
+}
+
+.app-container.gemma-shell .gemma-chat-ai > div:last-child {
+  color: var(--gemma-muted);
+  border-color: var(--gemma-field-border);
+}
+
+.app-container.gemma-shell .gemma-chat-ai > div:last-child button {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.app-container.gemma-shell .gemma-chat-ai button:hover {
+  color: var(--gemma-text);
+}
+
+.app-container.gemma-shell .gemma-user-meta {
+  color: #eadbce;
+}
+
+.app-container.gemma-shell .gemma-user-meta button:hover {
+  color: #fff;
+}
+
+.app-container.gemma-shell .gemma-composer {
+  gap: 12px;
+}
+
+.app-container.gemma-shell .gemma-record-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background: var(--gemma-accent);
+}
+
+.app-container.gemma-shell .gemma-record-dot.is-recording {
+  background: #ef4444;
+  animation: hqPulse 1s ease-in-out infinite;
+}
+
+.app-container.gemma-shell .gemma-send-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--gemma-accent);
+  border: 1px solid transparent;
+  box-shadow: 0 5px 14px rgba(74, 48, 34, 0.2);
+  transition: background 160ms ease, transform 160ms ease, opacity 160ms ease;
+}
+
+.app-container.gemma-shell .gemma-send-button:hover:not(:disabled) {
+  color: #fff;
+  background: var(--gemma-accent-hover);
+  transform: translateY(-1px);
+}
+
+.app-container.gemma-shell .gemma-send-button:disabled {
+  opacity: 0.45;
+}
+
+.app-container.gemma-shell .gemma-audio-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+  margin-top: 12px;
+  padding: 12px;
+  color: var(--gemma-muted);
+  background: var(--gemma-player-bg);
+  border: 1px solid var(--gemma-player-border);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 2px rgba(74, 48, 34, 0.08);
+}
+
+.app-container.gemma-shell .gemma-audio-player audio {
+  display: none;
+}
+
+.app-container.gemma-shell .gemma-audio-play {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--gemma-accent);
+  border: 0;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(74, 48, 34, 0.22);
+}
+
+.app-container.gemma-shell .gemma-audio-play:hover {
+  color: #fff;
+  background: var(--gemma-accent-hover);
+}
+
+.app-container.gemma-shell .gemma-audio-timeline {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.app-container.gemma-shell .gemma-audio-times {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--chrome-font-mono);
+  font-size: 11px;
+}
+
+.app-container.gemma-shell .gemma-audio-timeline input[type='range'] {
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  appearance: none;
+  cursor: pointer;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--gemma-accent) 0 var(--gemma-audio-progress), color-mix(in srgb, var(--gemma-field-border) 65%, transparent) var(--gemma-audio-progress) 100%);
+}
+
+.app-container.gemma-shell .gemma-audio-timeline input[type='range']::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  appearance: none;
+  background: var(--gemma-accent);
+  border: 2px solid var(--gemma-player-bg);
+  border-radius: 9999px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.app-container.gemma-shell .gemma-audio-player:hover input[type='range']::-webkit-slider-thumb,
+.app-container.gemma-shell .gemma-audio-timeline input[type='range']:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.app-container.gemma-shell .gemma-audio-download {
+  position: relative;
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--gemma-muted);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.app-container.gemma-shell .gemma-audio-download:hover {
+  color: var(--gemma-text);
+  background: var(--gemma-soft-bg);
+}
+
+.app-container.gemma-shell .gemma-audio-download select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-rail-brand {
+  color: #fff;
+  background: linear-gradient(145deg, #4a3022 0%, #8b5e3c 100%);
+  border-color: rgba(111, 71, 46, 0.35);
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail > div:nth-child(2) {
+  border-color: rgba(139, 94, 60, 0.18);
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group {
+  color: #6f472e;
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group:hover {
+  color: #2b1c14;
+  background: rgba(215, 192, 167, 0.45);
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group[style*='#d97706'] {
+  color: #6f472e;
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group[aria-current='page'] {
+  color: #4a3022;
+  background: rgba(111, 71, 46, 0.12);
+  border-color: rgba(111, 71, 46, 0.3);
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .gemma-theme-toggle {
+  color: #5c4033;
+  background: #f7f1e9;
+  border: 1px solid #d6c5b4;
+  box-shadow: 0 2px 8px rgba(87, 55, 37, 0.12);
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-header-local {
+  color: #6f472e;
+  background: rgba(232, 219, 203, 0.6);
+  border-color: rgba(139, 94, 60, 0.2);
+}
+
+.app-container.gemma-shell.gemma-theme-light .gemma-footer-metrics,
+.app-container.gemma-shell.gemma-theme-light .gemma-footer-metrics span:first-child,
+.app-container.gemma-shell.gemma-theme-light .gemma-footer .logs-footer-actions::after {
+  color: #6f472e;
 }
 /* Donation-moment popover (DonateMomentPopover.jsx): Clippy-esque bounce-in,
    collapsing to a plain fade under prefers-reduced-motion (the JSX swaps the
