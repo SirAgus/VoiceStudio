@@ -20,6 +20,15 @@ transformers serve google/gemma-4-E4B-it --reasoning on
 
 Keep that terminal running, start VoiceStudio, open **Talk**, select a saved voice, then press **Talk**. Speak and press **Stop** to send the turn.
 
+For source development, after downloading the model once, one command starts
+Gemma, the VoiceStudio API, and the browser UI together:
+
+```bash
+bun run dev:gemma4
+```
+
+Press `Ctrl+C` once to stop all three processes.
+
 The default endpoint is `http://localhost:8000/v1`. Override it with `GEMMA4_BASE_URL`; override the model id with `GEMMA4_MODEL`.
 
 The server is OpenAI-compatible and loads only downloaded models. VoiceStudio never starts a download from the Talk workspace.

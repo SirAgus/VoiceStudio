@@ -16,12 +16,14 @@ the frozen-backend fallback mirror it for their toolchains.
 ### Changed
 
 - Added an isolated Gemma 4 E4B voice-assistant fork with native audio understanding and existing TTS profile playback
+- Gemma, the VoiceStudio API, and the browser UI can now start together with one development command
 
 ### Added
 
 ### Docs
 
 - Documented the local Transformers Serve setup and the half-duplex voice pipeline
+- Documented the single-command Gemma development startup
 
 ### Fixed
 
