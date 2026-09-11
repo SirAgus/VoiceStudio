@@ -3801,7 +3801,7 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   gap: 8px;
 }
 
-.gemma-nav-rail > div:last-child button:last-child {
+.gemma-nav-rail > div:last-child > button:last-child {
   display: none;
 }
 
@@ -4078,6 +4078,34 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   opacity: 0;
 }
 
+.app-container.gemma-shell .gemma-rail-utilities {
+  padding: 2px;
+  background: var(--gemma-soft-bg);
+  border: 1px solid var(--gemma-field-border);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.16);
+}
+
+.app-container.gemma-shell .gemma-rail-utilities > button {
+  width: 22px;
+  height: 28px;
+  color: var(--gemma-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.app-container.gemma-shell .gemma-rail-utilities > button:hover {
+  color: var(--gemma-accent);
+  background: var(--gemma-soft-hover);
+}
+
+.app-container.gemma-shell .gemma-rail-utilities > button:focus-visible {
+  outline: 2px solid var(--gemma-accent);
+  outline-offset: 1px;
+}
+
 .app-container.gemma-shell.gemma-theme-light .gemma-rail-brand {
   color: #fff;
   background: linear-gradient(145deg, #4a3022 0%, #8b5e3c 100%);
@@ -4109,9 +4137,9 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
 
 .app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .gemma-theme-toggle {
   color: #5c4033;
-  background: #f7f1e9;
-  border: 1px solid #d6c5b4;
-  box-shadow: 0 2px 8px rgba(87, 55, 37, 0.12);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 .app-container.gemma-shell.gemma-theme-light .gemma-header-local {
