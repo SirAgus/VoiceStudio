@@ -1,4 +1,5 @@
 import { apiFetch, apiJson, apiUrl } from './client';
+import { encodeAudio } from './stories';
 
 export interface AssistantTurn {
   transcript: string;
@@ -174,4 +175,15 @@ export async function attachGemma4MessageAudio(
 
 export function gemma4MessageAudioUrl(path?: string | null): string | undefined {
   return path ? apiUrl(path) : undefined;
+}
+
+export async function downloadGemma4MessageAudio(
+  threadId: string,
+  messageId: string,
+  format: 'wav' | 'mp3' | 'ogg',
+): Promise<Blob> {
+  const wav = await (
+    await apiFetch(`/gemma4-assistant/threads/${threadId}/messages/${messageId}/audio`)
+  ).blob();
+  return format === 'wav' ? wav : encodeAudio(wav, format);
 }

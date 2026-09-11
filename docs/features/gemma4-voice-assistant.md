@@ -21,6 +21,10 @@ removes any audio owned by that message. The **Audio reply** switch controls
 whether a turn is synthesized and saved as audio, so text-only turns never
 create a TTS file.
 
+Use the download menu on any spoken reply to export the original WAV or a
+compressed MP3/OGG copy. OGG is convenient for sharing voice notes through
+messaging apps such as WhatsApp.
+
 ## Setup
 
 Install the official `llama-server` runtime first. On Windows:

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Bot, Brain, Mic, Send, Square, Trash2, Volume2 } from 'lucide-react';
+import { Bot, Brain, Download, Mic, Send, Square, Trash2, Volume2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 
@@ -8,6 +8,7 @@ import {
   createGemma4Thread,
   deleteGemma4Message,
   deleteGemma4Thread,
+  downloadGemma4MessageAudio,
   gemma4MessageAudioUrl,
   getGemma4Thread,
   listGemma4Threads,
@@ -32,6 +33,7 @@ export default function Gemma4Assistant({ profiles = [] }) {
   const [currentThreadId, setCurrentThreadId] = useState('');
   const [threadsLoading, setThreadsLoading] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
+  const [downloadingAudioId, setDownloadingAudioId] = useState('');
   const initialPersona = useRef(persona);
 
   const applyThread = useCallback(
@@ -258,6 +260,27 @@ export default function Gemma4Assistant({ profiles = [] }) {
     [currentThreadId, isBusy, t],
   );
 
+  const downloadAudio = useCallback(
+    async (messageId, format) => {
+      if (!currentThreadId) return;
+      setDownloadingAudioId(messageId);
+      try {
+        const blob = await downloadGemma4MessageAudio(currentThreadId, messageId, format);
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `gemma4-${messageId}.${format}`;
+        anchor.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (error) {
+        toast.error(error?.message || t('gemma4_assistant.failed'));
+      } finally {
+        setDownloadingAudioId('');
+      }
+    },
+    [currentThreadId, t],
+  );
+
   const phaseLabel = recording.isRecording
     ? t('gemma4_assistant.listening')
     : phase === 'thinking'
@@ -314,10 +337,10 @@ export default function Gemma4Assistant({ profiles = [] }) {
           </div>
           <label className="flex flex-col gap-[6px] text-sm text-fg-muted">
             {t('gemma4_assistant.voice')}
-              <Select
-                value={profileId || profiles[0]?.id || ''}
-                onChange={(event) => setProfileId(event.target.value)}
-              >
+            <Select
+              value={profileId || profiles[0]?.id || ''}
+              onChange={(event) => setProfileId(event.target.value)}
+            >
               <option value="">{t('gemma4_assistant.default_voice')}</option>
               {profiles.map((profile) => (
                 <option key={profile.id} value={profile.id}>
@@ -368,13 +391,35 @@ export default function Gemma4Assistant({ profiles = [] }) {
                   turn.text
                 )}
                 {turn.audioUrl ? (
-                  <audio
-                    className="mt-[10px] block h-[36px] w-full min-w-[260px]"
-                    controls
-                    preload="metadata"
-                    src={turn.audioUrl}
-                    aria-label={t('gemma4_assistant.spoken_reply')}
-                  />
+                  <div className="mt-[10px] flex flex-wrap items-center gap-[8px]">
+                    <audio
+                      className="block h-[36px] w-full min-w-[260px]"
+                      controls
+                      preload="metadata"
+                      src={turn.audioUrl}
+                      aria-label={t('gemma4_assistant.spoken_reply')}
+                    />
+                    <label className="inline-flex items-center gap-[6px] text-xs text-fg-muted">
+                      <Download size={13} />
+                      <span className="sr-only">{t('common.download')}</span>
+                      <select
+                        aria-label={t('common.download')}
+                        className="rounded border border-[var(--color-border)] bg-bg-elev-2 px-[6px] py-[3px]"
+                        disabled={downloadingAudioId === turn.id}
+                        defaultValue=""
+                        onChange={(event) => {
+                          const format = event.target.value;
+                          if (format) downloadAudio(turn.id, format);
+                          event.target.value = '';
+                        }}
+                      >
+                        <option value="">{t('common.download')}</option>
+                        <option value="wav">WAV</option>
+                        <option value="mp3">MP3</option>
+                        <option value="ogg">OGG</option>
+                      </select>
+                    </label>
+                  </div>
                 ) : null}
                 <button
                   type="button"
