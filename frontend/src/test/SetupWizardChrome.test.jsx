@@ -151,7 +151,7 @@ describe('studio chrome does not appear before the studio', () => {
     // Asserted per-branch rather than as a global count: a bare count of 1
     // would still pass if the mount MOVED from the studio into the splash.
     expect(preStudio).not.toContain('LogsFooter');
-    expect(studio.match(/<LogsFooter\s*\/>/g) || []).toHaveLength(1);
+    expect(studio.match(/<LogsFooter(?:\s+[^>]*)?\s*\/>/g) || []).toHaveLength(1);
   });
 
   it('gives the wizard the whole viewport, since nothing is reserved below it', () => {

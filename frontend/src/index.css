@@ -3560,11 +3560,11 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   50%      { opacity: 1;   transform: scale(1.08); }
 }
 
-/* ═══ GEMMA 4 SHELL ═══
-   The Gemma assistant has its own product surface: espresso background,
-   compact 80px rail, and a thin status footer. Keep this scoped to `talk`
-   so the rest of VoiceStudio retains its normal chrome. */
-.app-container.gemma-shell {
+/* ═══ VOICESTUDIO ESPRESSO SHELL ═══
+   Shared product surface for every workspace. Gemma-specific conversation
+   components remain scoped below, while the shell, tokens and primitives are
+   intentionally global so navigation never changes visual language. */
+.app-container.espresso-shell {
   --gemma-page-bg: #0b0908;
   --gemma-page-image: radial-gradient(at 0% 0%, rgba(55, 35, 24, 0.55) 0, transparent 50%), radial-gradient(at 100% 100%, rgba(17, 10, 7, 0.8) 0, transparent 50%), radial-gradient(at 50% 0%, rgba(110, 68, 40, 0.2) 0, transparent 50%);
   --gemma-card-bg: rgba(20, 16, 14, 0.88);
@@ -3599,12 +3599,23 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   --chrome-accent-bg: rgba(217, 119, 6, 0.14);
   --chrome-accent-border: rgba(217, 119, 6, 0.38);
   --chrome-severity-ok: #10b981;
+  --color-fg: #f5f0eb;
+  --color-fg-muted: #b9aaa0;
+  --color-fg-subtle: #82736a;
+  --color-fg-inverse: #160f0b;
+  --color-bg: #0b0908;
+  --color-bg-elev-1: rgba(23, 18, 15, 0.94);
+  --color-bg-elev-2: rgba(41, 30, 24, 0.82);
+  --color-bg-elev-3: rgba(54, 38, 29, 0.62);
+  --color-border: rgba(139, 94, 60, 0.24);
+  --color-border-strong: rgba(190, 135, 85, 0.36);
   --color-brand: #d97706;
-  grid-template-columns: 80px minmax(0, 1fr);
+  --color-brand-hover: #f59e0b;
+  --color-brand-glow: rgba(217, 119, 6, 0.35);
   background: var(--gemma-page-bg);
 }
 
-.app-container.gemma-shell.gemma-theme-light {
+.app-container.espresso-shell.gemma-theme-light {
   --gemma-page-bg: #f6f3ee;
   --gemma-page-image: radial-gradient(at 0% 0%, rgba(215, 192, 167, 0.35) 0, transparent 50%), radial-gradient(at 100% 0%, rgba(190, 156, 123, 0.25) 0, transparent 50%), radial-gradient(at 50% 100%, rgba(246, 241, 232, 0.95) 0, transparent 50%);
   --gemma-card-bg: rgba(255, 252, 247, 0.88);
@@ -3638,10 +3649,78 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   --chrome-accent: #6f472e;
   --chrome-accent-bg: rgba(111, 71, 46, 0.12);
   --chrome-accent-border: rgba(111, 71, 46, 0.3);
+  --color-fg: #2b1c14;
+  --color-fg-muted: #765b4b;
+  --color-fg-subtle: #a67c52;
+  --color-fg-inverse: #fffaf3;
+  --color-bg: #f6f3ee;
+  --color-bg-elev-1: rgba(255, 252, 247, 0.94);
+  --color-bg-elev-2: rgba(232, 219, 203, 0.82);
+  --color-bg-elev-3: rgba(215, 192, 167, 0.55);
+  --color-border: rgba(139, 94, 60, 0.2);
+  --color-border-strong: rgba(111, 71, 46, 0.34);
   --color-brand: #4a3022;
+  --color-brand-hover: #2b1c14;
+  --color-brand-glow: rgba(111, 71, 46, 0.24);
 }
 
-.app-container.gemma-shell > .nav-rail {
+.app-container.espresso-shell {
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --chrome-radius-pill: 10px;
+  --focus-ring: 0 0 0 2px var(--gemma-page-bg), 0 0 0 4px color-mix(in srgb, var(--gemma-accent) 52%, transparent);
+  color: var(--gemma-text);
+}
+
+.app-container.espresso-shell [data-slot='card'],
+.app-container.espresso-shell .ui-panel--glass,
+.app-container.espresso-shell .ui-panel--solid,
+.app-container.espresso-shell .ui-panel--flat {
+  color: var(--gemma-text);
+  background: var(--gemma-card-bg);
+  border: 1px solid var(--gemma-card-border);
+  border-radius: 16px;
+  box-shadow: var(--gemma-card-shadow);
+}
+
+.app-container.espresso-shell .ui-panel--glass::before {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--gemma-accent) 28%, transparent), transparent);
+}
+
+.app-container.espresso-shell :where(.input-base, .ui-input, .ui-select, textarea, select) {
+  color: var(--gemma-text);
+  background-color: var(--gemma-field-bg);
+  border-color: var(--gemma-field-border);
+  border-radius: 10px;
+}
+
+.app-container.espresso-shell :where(.input-base, .ui-input, .ui-select, textarea, select):focus {
+  border-color: var(--gemma-accent);
+}
+
+.app-container.espresso-shell .lp-action-card {
+  --card-hue: var(--gemma-accent) !important;
+  background: color-mix(in srgb, var(--gemma-card-bg) 92%, transparent);
+  border: 1px solid var(--gemma-card-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+.app-container.espresso-shell .lp-action-card:hover,
+.app-container.espresso-shell .lp-action-card--raised {
+  border-color: color-mix(in srgb, var(--gemma-accent) 48%, transparent);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+}
+
+.app-container.espresso-shell.gemma-theme-light .launchpad img[data-testid='launchpad-signal-field'] {
+  mix-blend-mode: multiply;
+  opacity: 0.18;
+}
+
+.app-container.espresso-shell > .nav-rail {
   grid-column: 1;
   grid-row: 1 / -1;
   width: 80px;
@@ -3653,15 +3732,50 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   border-left: 0;
 }
 
-.app-container.gemma-shell > .main-content {
-  grid-column: 2;
-  grid-row: 2;
-  background: var(--gemma-page-bg);
-  overflow: hidden;
+.app-container.espresso-shell:not(.nav-tabs):not(.sidebar-hidden):not(.sidebar-collapsed) {
+  grid-template-columns: 80px minmax(180px, 220px) minmax(0, 4fr);
 }
 
-.app-container.gemma-shell .header-area {
-  grid-column: 2;
+.app-container.espresso-shell:not(.nav-tabs).sidebar-collapsed {
+  grid-template-columns: 80px 46px minmax(0, 4fr);
+}
+
+.app-container.espresso-shell:not(.nav-tabs).sidebar-hidden {
+  grid-template-columns: 80px minmax(0, 1fr);
+}
+
+.app-container.espresso-shell.rail-right:not(.sidebar-hidden):not(.sidebar-collapsed) {
+  grid-template-columns: minmax(180px, 220px) minmax(0, 4fr) 80px;
+}
+
+.app-container.espresso-shell.rail-right.sidebar-collapsed {
+  grid-template-columns: 46px minmax(0, 4fr) 80px;
+}
+
+.app-container.espresso-shell.rail-right.sidebar-hidden {
+  grid-template-columns: minmax(0, 1fr) 80px;
+}
+
+.app-container.espresso-shell.nav-tabs {
+  grid-template-columns: minmax(180px, 220px) minmax(0, 4fr);
+}
+
+.app-container.espresso-shell.nav-tabs.sidebar-collapsed {
+  grid-template-columns: 46px minmax(0, 4fr);
+}
+
+.app-container.espresso-shell.nav-tabs.sidebar-hidden {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.app-container.espresso-shell > .main-content {
+  grid-row: 2;
+  background-color: var(--gemma-page-bg);
+  background-image: var(--gemma-page-image);
+}
+
+.app-container.espresso-shell .header-area {
+  grid-column: 2 / -1;
   grid-row: 1;
   min-height: 50px;
   padding: 0 22px;
@@ -3669,13 +3783,18 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   border-bottom: 1px solid var(--chrome-border);
 }
 
-.app-container.gemma-shell .header-area h1,
-.app-container.gemma-shell .header-area p {
+.app-container.espresso-shell.rail-right .header-area,
+.app-container.espresso-shell.nav-tabs .header-area {
+  grid-column: 1 / -1;
+}
+
+.app-container.espresso-shell .header-area h1,
+.app-container.espresso-shell .header-area p {
   color: var(--chrome-fg);
 }
 
-.app-container.gemma-shell .header-area button,
-.app-container.gemma-shell .header-area [role='button'] {
+.app-container.espresso-shell .header-area button,
+.app-container.espresso-shell .header-area [role='button'] {
   color: var(--chrome-fg-muted);
 }
 
@@ -3693,13 +3812,21 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   color: #34d399;
 }
 
-.app-container.gemma-shell > .logs-footer {
-  grid-column: 2;
+.app-container.espresso-shell > .logs-footer {
+  grid-column: 2 / -1;
   grid-row: 4;
-  min-height: 28px;
-  height: 28px !important;
   background: var(--gemma-footer-bg);
   border-top: 1px solid var(--chrome-border);
+}
+
+.app-container.espresso-shell.rail-right > .logs-footer,
+.app-container.espresso-shell.nav-tabs > .logs-footer {
+  grid-column: 1 / -1;
+}
+
+.app-container.gemma-shell > .logs-footer {
+  min-height: 28px;
+  height: 28px !important;
 }
 
 .app-container.gemma-shell .logs-footer--open {
@@ -3715,7 +3842,7 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   border-bottom: 0;
 }
 
-.app-container.gemma-shell .logs-footer button:hover {
+.app-container.espresso-shell .logs-footer button:hover {
   background: rgba(217, 119, 6, 0.12);
 }
 
@@ -3750,7 +3877,8 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   white-space: nowrap;
 }
 
-.gemma-nav-rail .gemma-rail-brand {
+.espresso-nav-rail .gemma-rail-brand {
+  order: -1;
   display: inline-flex;
   width: 42px;
   height: 42px;
@@ -3765,43 +3893,44 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
 
-.gemma-nav-rail > div:nth-child(2) {
+.espresso-nav-rail > div:first-child {
   width: 44px;
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.gemma-nav-rail .group {
+.espresso-nav-rail .group {
+  --rail-accent: var(--gemma-accent) !important;
   width: 40px;
   height: 40px;
   color: #8c7a6f;
   border-radius: 12px;
 }
 
-.gemma-nav-rail .group:hover {
+.espresso-nav-rail .group:hover {
   color: #f4eee8;
   background: rgba(255, 255, 255, 0.07);
 }
 
-.gemma-nav-rail .group[style*='#d97706'] {
+.espresso-nav-rail .group[style*='#d97706'] {
   color: #f59e0b;
 }
 
-.gemma-nav-rail .group:has(svg) {
+.espresso-nav-rail .group:has(svg) {
   transition: color 140ms ease, background 140ms ease, border-color 140ms ease;
 }
 
-.gemma-nav-rail .group[aria-current='page'],
-.gemma-nav-rail .group.bg-\[color-mix\] {
+.espresso-nav-rail .group[aria-current='page'],
+.espresso-nav-rail .group.bg-\[color-mix\] {
   background: rgba(217, 119, 6, 0.16);
   border-color: rgba(217, 119, 6, 0.42);
 }
 
-.gemma-nav-rail > div:last-child {
+.espresso-nav-rail > div:last-child {
   gap: 8px;
 }
 
-.gemma-nav-rail > div:last-child button:last-child {
+.espresso-nav-rail > div:last-child button:last-child {
   display: none;
 }
 
@@ -3908,6 +4037,12 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   grid-row: 1 / 3;
   align-self: stretch;
   overflow-y: auto;
+}
+
+/* Titlebar navigation removes the rail column, so keep the settings panel
+   explicitly anchored to the workspace's second column in that shell too. */
+.app-container.gemma-shell.nav-tabs .gemma-chat-settings {
+  grid-column: 2;
 }
 
 .app-container.gemma-shell .gemma-chat-scroll {
@@ -4119,7 +4254,7 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   opacity: 0;
 }
 
-.app-container.gemma-shell .gemma-nav-rail .gemma-theme-toggle {
+.app-container.espresso-shell .espresso-nav-rail .gemma-theme-toggle {
   color: var(--gemma-accent);
   background: var(--gemma-soft-bg);
   border: 1px solid var(--gemma-field-border);
@@ -4127,41 +4262,41 @@ html[data-ui-scale-engine='native'] .app-bootstrap-scale {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 }
 
-.app-container.gemma-shell .gemma-nav-rail .gemma-theme-toggle:focus-visible {
+.app-container.espresso-shell .espresso-nav-rail .gemma-theme-toggle:focus-visible {
   outline: 2px solid var(--gemma-accent);
   outline-offset: 2px;
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-rail-brand {
+.app-container.espresso-shell.gemma-theme-light .gemma-rail-brand {
   color: #fff;
   background: linear-gradient(145deg, #4a3022 0%, #8b5e3c 100%);
   border-color: rgba(111, 71, 46, 0.35);
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail > div:nth-child(2) {
+.app-container.espresso-shell.gemma-theme-light .espresso-nav-rail > div:first-child {
   border-color: rgba(139, 94, 60, 0.18);
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group {
+.app-container.espresso-shell.gemma-theme-light .espresso-nav-rail .group {
   color: #6f472e;
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group:hover {
+.app-container.espresso-shell.gemma-theme-light .espresso-nav-rail .group:hover {
   color: #2b1c14;
   background: rgba(215, 192, 167, 0.45);
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group[style*='#d97706'] {
+.app-container.espresso-shell.gemma-theme-light .espresso-nav-rail .group[style*='#d97706'] {
   color: #6f472e;
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .group[aria-current='page'] {
+.app-container.espresso-shell.gemma-theme-light .espresso-nav-rail .group[aria-current='page'] {
   color: #4a3022;
   background: rgba(111, 71, 46, 0.12);
   border-color: rgba(111, 71, 46, 0.3);
 }
 
-.app-container.gemma-shell.gemma-theme-light .gemma-nav-rail .gemma-theme-toggle {
+.app-container.espresso-shell.gemma-theme-light .espresso-nav-rail .gemma-theme-toggle {
   color: #5c4033;
   background: #f7f1e9;
   border: 1px solid #d6c5b4;

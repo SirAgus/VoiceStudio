@@ -1380,7 +1380,7 @@ function App() {
         isSidebarCollapsed,
         hideSidebar,
         shellSizeClass,
-      })} ${mode === 'talk' ? `gemma-shell gemma-theme-${gemmaTheme}` : ''}`}
+      })} espresso-shell gemma-theme-${gemmaTheme} ${mode === 'talk' ? 'gemma-shell' : ''}`}
       style={{ '--ui-scale': effectiveUiScale }}
     >
       {pendingTrimFile && (

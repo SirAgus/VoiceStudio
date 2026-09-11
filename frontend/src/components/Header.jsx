@@ -244,8 +244,11 @@ export default function Header({
     }
   };
   // Dynamic accent color must stay inline — it's driven by the current view.
-  const dotStyle = { background: view.accent, boxShadow: `0 0 10px ${view.accent}90` };
-  const labelStyle = { color: view.accent };
+  const dotStyle = {
+    background: 'var(--gemma-accent)',
+    boxShadow: '0 0 10px color-mix(in srgb, var(--gemma-accent) 56%, transparent)',
+  };
+  const labelStyle = { color: 'var(--gemma-accent)' };
   return (
     <div
       className={`header-area ${tabsInTitlebar ? 'header-area--tabs' : ''}`}
@@ -328,7 +331,7 @@ export default function Header({
           </span>
         )}
         <WaveBars
-          color={view.accent}
+          color="var(--gemma-accent)"
           active={modelStatus === 'ready' || modelStatus === 'loading'}
         />
         {mode === 'talk' && (

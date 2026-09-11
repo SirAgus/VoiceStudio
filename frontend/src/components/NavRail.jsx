@@ -1,18 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ArrowLeftRight,
-  BarChart3,
-  Film,
-  FolderOpen,
-  Globe,
-  House,
-  MessageCircle,
-  Mic,
-  Moon,
-  Sun,
-  Waves,
-} from 'lucide-react';
+import { ArrowLeftRight, Moon, Sun, Waves } from 'lucide-react';
 import { NAV_ITEMS as ITEM_DEFS, NAV_FOOTER_ITEMS as FOOTER_DEFS } from './navItems';
 
 // Shared icon-button base for the chrome rail (was `.rail-btn`). `group` enables
@@ -70,37 +58,6 @@ export default function NavRail({
     () => FOOTER_DEFS.map((d) => ({ ...d, label: t(`nav.${d.tKey}`) })),
     [t],
   );
-  const gemmaMode = mode === 'talk';
-  const gemmaItems = React.useMemo(
-    () => [
-      {
-        id: 'launchpad',
-        Icon: House,
-        tKey: 'launchpad',
-        label: t('nav.launchpad'),
-        accent: '#d97706',
-      },
-      { id: 'studio', Icon: Globe, tKey: 'voice', label: t('nav.voice'), accent: '#d97706' },
-      { id: 'talk', Icon: MessageCircle, tKey: 'talk', label: t('nav.talk'), accent: '#d97706' },
-      { id: 'dub', Icon: Film, tKey: 'dub', label: t('nav.dub'), accent: '#d97706' },
-      { id: 'stories', Icon: Mic, tKey: 'stories', label: t('nav.stories'), accent: '#d97706' },
-      {
-        id: 'projects',
-        Icon: FolderOpen,
-        tKey: 'omnidrive',
-        label: t('nav.omnidrive'),
-        accent: '#d97706',
-      },
-      {
-        id: 'catalogue',
-        Icon: BarChart3,
-        tKey: 'catalogue',
-        label: t('nav.catalogue'),
-        accent: '#d97706',
-      },
-    ],
-    [t],
-  );
 
   // `nav-rail` is retained purely as the layout hook the (out-of-scope)
   // `.app-container > .nav-rail` grid rules position by; all visual styling now
@@ -112,15 +69,10 @@ export default function NavRail({
 
   return (
     <aside
-      className={`nav-rail z-50 flex select-none flex-col items-center gap-[10px] bg-[var(--chrome-bg)] pb-[10px] pt-[18px] ${asideBorder} ${gemmaMode ? 'gemma-nav-rail' : ''}`}
+      className={`nav-rail espresso-nav-rail z-50 flex select-none flex-col items-center gap-[10px] bg-[var(--chrome-bg)] pb-[10px] pt-[18px] ${asideBorder}`}
     >
-      {gemmaMode && (
-        <div className="gemma-rail-brand" aria-label="VoiceStudio">
-          <Waves size={22} strokeWidth={2.2} aria-hidden="true" />
-        </div>
-      )}
       <div className="flex flex-1 flex-col items-center gap-[9px]">
-        {(gemmaMode ? gemmaItems : items).map((it) => (
+        {items.map((it) => (
           <RailBtn
             key={it.id}
             {...it}
@@ -130,18 +82,19 @@ export default function NavRail({
           />
         ))}
       </div>
+      <div className="gemma-rail-brand" aria-label="VoiceStudio">
+        <Waves size={22} strokeWidth={2.2} aria-hidden="true" />
+      </div>
       <div className="flex flex-col items-center gap-[8px]">
-        {gemmaMode && (
-          <button
-            type="button"
-            title={t('settings.theme')}
-            aria-label={t('settings.theme')}
-            className={`${RAIL_BTN_BASE} gemma-theme-toggle text-[var(--chrome-fg-dim)] hover:bg-[var(--chrome-hover-bg)] hover:text-[var(--chrome-fg)]`}
-            onClick={onToggleGemmaTheme}
-          >
-            {gemmaTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-        )}
+        <button
+          type="button"
+          title={t('settings.theme')}
+          aria-label={t('settings.theme')}
+          className={`${RAIL_BTN_BASE} gemma-theme-toggle text-[var(--chrome-fg-dim)] hover:bg-[var(--chrome-hover-bg)] hover:text-[var(--chrome-fg)]`}
+          onClick={onToggleGemmaTheme}
+        >
+          {gemmaTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
         {footerItems.map((it) => (
           <RailBtn
             key={it.id}

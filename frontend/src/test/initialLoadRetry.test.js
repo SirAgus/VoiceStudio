@@ -49,7 +49,7 @@ describe('retryInitialLoad (#1158 class)', () => {
     // URL instance, so build one from the specifier's pathname directly.
     const nodeUrl = await import('node:url');
     const NodeURL = nodeUrl.URL;
-    const hookPath = new NodeURL('../hooks/useAppData.js', import.meta.url).pathname;
+    const hookPath = nodeUrl.fileURLToPath(new NodeURL('../hooks/useAppData.js', import.meta.url));
     const src = readFileSync(hookPath, 'utf8');
     const initialBlock = src.slice(src.indexOf('retryInitialLoad('));
     for (const loader of [
