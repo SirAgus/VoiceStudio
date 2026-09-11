@@ -17,6 +17,7 @@ the frozen-backend fallback mirror it for their toolchains.
 
 - Added an isolated HauhauCS Gemma 4 E4B Aggressive assistant with voice or typed input, visible chat history, and replayable TTS profile responses
 - Gemma, the VoiceStudio API, and the browser UI can now start together with one development command
+- First launch now waits for the Aggressive model download and health check before opening the API and UI
 
 ### Added
 

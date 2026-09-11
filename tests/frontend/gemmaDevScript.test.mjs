@@ -12,6 +12,7 @@ test("Gemma development command starts and supervises the full browser stack", (
   const command = packageJson.scripts["dev:gemma4"];
   assert.match(command, /bun run setup:api/);
   assert.match(command, /bun run dev:gemma4-server/);
+  assert.equal(command.match(/bun run wait:gemma4/g)?.length, 2);
   assert.match(command, /bun run dev:api/);
   assert.match(command, /bun run dev:frontend/);
   assert.match(command, /--kill-others-on-fail/);

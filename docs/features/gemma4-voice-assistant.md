@@ -33,7 +33,8 @@ Press `Ctrl+C` once to stop all three processes.
 
 The first run downloads the Q4_K_M model (about 5 GB) and its multimodal
 projector (about 945 MB) from Hugging Face. Later runs use llama.cpp's local
-cache. Open **Talk**, select a saved voice, then type a message or press
+cache. The API and UI wait for the model health check, so the first launch does
+not open the workspace until that download and model load finish. Open **Talk**, select a saved voice, then type a message or press
 **Talk**. For microphone input, speak and press **Stop** to send the turn.
 
 The default endpoint is `http://localhost:8000/v1`. Override it with `GEMMA4_BASE_URL`; override the model id with `GEMMA4_MODEL`.
